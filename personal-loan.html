@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal Loan Application - Renmal Capital</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-wrapper">
+                <div class="logo">
+                    <img src="assets/images/renmal-logo.png" alt="Renmal Capital Limited" class="logo-image">
+                    <span class="logo-text">Renmal Capital</span>
+                </div>
+                <ul class="nav-menu">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="index.html#features">Features</a></li>
+                    <li><a href="index.html#contact">Contact</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Application Form Section -->
+    <section class="application-section hero-blue">
+        <div class="container">
+            <div class="form-wrapper">
+                <div class="form-header">
+                    <div class="badge">Personal Loan</div>
+                    <h1>Apply for a Personal Loan</h1>
+                    <p>Fill in your details below. Collateral is required for all loans.</p>
+                </div>
+
+                <form class="application-form" id="personalLoanForm" action="https://formspree.io/f/xrevqvpy" method="POST">
+                    <div class="form-section">
+                        <h3>Personal Information</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Full Name *</label>
+                                <input type="text" name="fullName" required placeholder="John Doe">
+                            </div>
+                            <div class="form-group">
+                                <label>Phone Number *</label>
+                                <input type="tel" name="phone" required placeholder="+265 XXX XXX XXX">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Email Address</label>
+                                <input type="email" name="email" placeholder="john@example.com">
+                            </div>
+                            <div class="form-group">
+                                <label>National ID *</label>
+                                <input type="text" name="nationalId" required placeholder="National ID Number">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Residential Address *</label>
+                            <textarea name="address" required rows="3" placeholder="Your physical address"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3>Employment Details</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Occupation *</label>
+                                <input type="text" name="occupation" required placeholder="Your job/business">
+                            </div>
+                            <div class="form-group">
+                                <label>Employer</label>
+                                <input type="text" name="employer" placeholder="Company name">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Monthly Income (MWK) *</label>
+                            <input type="number" name="monthlyIncome" required placeholder="500000">
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3>Loan Details</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Loan Amount (MWK) *</label>
+                                <input type="number" name="loanAmount" required placeholder="1000000" min="100000" max="5000000">
+                            </div>
+                            <div class="form-group">
+                                <label>Repayment Period *</label>
+                                <select name="repaymentPeriod" required>
+                                    <option value="">Select period</option>
+                                    <option value="1">1 Week (20% interest)</option>
+                                    <option value="2">2 Weeks (30% interest)</option>
+                                    <option value="3">3 Weeks (40% interest)</option>
+                                    <option value="4">4 Weeks (50% interest)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Purpose of Loan *</label>
+                            <select name="loanPurpose" required>
+                                <option value="">Select purpose</option>
+                                <option value="education">Education</option>
+                                <option value="medical">Medical Expenses</option>
+                                <option value="home">Home Improvement</option>
+                                <option value="emergency">Emergency</option>
+                                <option value="business">Small Business</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3>Collateral Information</h3>
+                        <div class="alert-box">
+                            <strong>⚠️ Important:</strong> Collateral is mandatory for all loans. Please provide details of your collateral.
+                        </div>
+                        <div class="form-group">
+                            <label>Collateral Description *</label>
+                            <textarea name="collateral" required rows="3" placeholder="Describe your collateral (e.g., land, vehicle, electronics, etc.)"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Estimated Collateral Value (MWK) *</label>
+                            <input type="number" name="collateralValue" required placeholder="2000000">
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3>Guarantor Information</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Guarantor Name *</label>
+                                <input type="text" name="guarantorName" required placeholder="Full name">
+                            </div>
+                            <div class="form-group">
+                                <label>Guarantor Phone *</label>
+                                <input type="tel" name="guarantorPhone" required placeholder="+265 XXX XXX XXX">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Relationship to Guarantor *</label>
+                            <input type="text" name="guarantorRelationship" required placeholder="e.g., Friend, Family member">
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary btn-lg btn-block">
+                            Submit Application
+                        </button>
+                        <p class="form-note">By submitting, you agree to our terms and conditions. We will contact you within 24 hours.</p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <script src="script.js"></script>
+</body>
+</html>

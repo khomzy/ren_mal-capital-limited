@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Renmal Capital Limited - Get Your Loan Today</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-wrapper">
+                    <div class="logo">
+                    <img src="assets/images/renmal-logo.png" alt="Renmal Capital Limited" class="logo-image">
+                    <span class="logo-text">Renmal Capital Limited</span>
+                </div>
+                <ul class="nav-menu">
+                    <li><a href="index.html" class="active">Home</a></li>
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#calculator">Calculator</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero hero-blue" data-reveal>
+        <div class="container">
+            <img src="assets/images/hero-people.png" alt="Professional Woman" class="hero-image">
+            <div class="hero-content">
+                <h1 class="hero-title">Get Your Loan Today</h1>
+                <p class="hero-subtitle">Quick, affordable microfinance loans tailored for your needs. Fast approval, flexible repayment terms.</p>
+                <div class="hero-stats">
+                    <div class="stat">
+                        <div class="stat-value">MWK 100K - 5M</div>
+                        <div class="stat-label">Loan Amount</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">24hrs</div>
+                        <div class="stat-label">Quick Approval</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">98%</div>
+                        <div class="stat-label">Success Rate</div>
+                    </div>
+                </div>
+                <div class="hero-actions">
+                    <a href="business-loan.html" class="btn btn-primary">Business Loan</a>
+                    <a href="personal-loan.html" class="btn btn-secondary">Personal Loan</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Loan Calculator Section -->
+    <section id="calculator" class="calculator-section" data-reveal>
+        <div class="container">
+            <div class="calculator-wrapper">
+                <div class="calculator-header">
+                    <h2>Calculate Your Loan</h2>
+                    <p>Estimate your monthly payment or loan amount easily</p>
+                </div>
+                
+                <div class="calculator-grid">
+                    <div class="calculator-inputs">
+                        <div class="input-group">
+                            <label>Loan Amount (MWK)</label>
+                            <div class="amount-buttons">
+                                <button class="amount-btn" data-amount="100000">100K</button>
+                                <button class="amount-btn" data-amount="500000">500K</button>
+                                <button class="amount-btn active" data-amount="1000000">1M</button>
+                                <button class="amount-btn" data-amount="2000000">2M</button>
+                                <button class="amount-btn" data-amount="5000000">5M</button>
+                            </div>
+                            <input type="range" id="loanAmount" min="100000" max="5000000" step="100000" value="1000000">
+                            <div class="input-value" id="amountValue">MWK 1,000,000</div>
+                        </div>
+
+                        <div class="input-group">
+                            <label>Loan Term (Weeks)</label>
+                            <div class="term-buttons">
+                                <button class="term-btn" data-weeks="1">1 Week<br><small>20%</small></button>
+                                <button class="term-btn" data-weeks="2">2 Weeks<br><small>30%</small></button>
+                                <button class="term-btn active" data-weeks="3">3 Weeks<br><small>40%</small></button>
+                                <button class="term-btn" data-weeks="4">4 Weeks<br><small>50%</small></button>
+                            </div>
+                            <input type="range" id="loanTerm" min="1" max="4" step="1" value="3">
+                            <div class="input-value" id="termValue">3 Weeks</div>
+                        </div>
+
+                        <div class="input-group">
+                            <label>Interest Rate (%)</label>
+                            <input type="number" id="interestRate" value="40" readonly>
+                        </div>
+                    </div>
+
+                    <div class="calculator-results">
+                        <div class="result-card">
+                            <h3>Repayment Summary</h3>
+                            <div class="result-main">
+                                <div class="result-label">Total Repayment</div>
+                                <div class="result-amount" id="totalRepayment">MWK 1,400,000</div>
+                            </div>
+                            <div class="result-details">
+                                <div class="result-item">
+                                    <span>Principal</span>
+                                    <span id="principalAmount">MWK 1,000,000</span>
+                                </div>
+                                <div class="result-item">
+                                    <span>Interest</span>
+                                    <span id="interestAmount">MWK 400,000</span>
+                                </div>
+                            </div>
+                            <div class="result-actions">
+                                <a href="personal-loan.html" class="btn btn-primary">Personal Loan</a>
+                                <a href="business-loan.html" class="btn btn-secondary">Business Loan</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features-section" data-reveal>
+        <div class="container">
+            <div class="section-header">
+                <h2>Why Choose Renmal Capital?</h2>
+                <p>We provide fast, reliable microfinance solutions</p>
+            </div>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3>Fast Approval</h3>
+                    <p>Get approved within 24 hours with minimal documentation</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔒</div>
+                    <h3>Collateral Required</h3>
+                    <p>Secure loans with collateral for better rates</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">💰</div>
+                    <h3>Flexible Terms</h3>
+                    <p>Choose from 1-4 weeks repayment periods</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📱</div>
+                    <h3>Easy Process</h3>
+                    <p>Simple online application, no paperwork</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section (continuous marquee) -->
+    <section id="testimonials" class="testimonials-section" data-reveal>
+        <div class="container">
+            <div class="section-header">
+                <h2>What Our Clients Say</h2>
+                <p>Success stories from our satisfied borrowers</p>
+            </div>
+
+            <div class="marquee">
+                <div class="marquee-track">
+                    <div class="testimonial-card">
+                        <div class="testimonial-text">"Quick approval and flexible terms. Perfect for my business needs."</div>
+                        <div class="testimonial-author">- John Banda</div>
+                    </div>
+                    <div class="testimonial-card">
+                        <div class="testimonial-text">"The best microfinance service in Blantyre. Highly recommended!"</div>
+                        <div class="testimonial-author">- Mary Chiwala</div>
+                    </div>
+                    <div class="testimonial-card">
+                        <div class="testimonial-text">"Professional service and fair rates. Helped me grow my business."</div>
+                        <div class="testimonial-author">- Paul Mthembu</div>
+                    </div>
+                    <div class="testimonial-card">
+                        <div class="testimonial-text">"mumakwana madolo, keep it up"</div>
+                        <div class="testimonial-author">- Kondwani Ngowela</div>
+                    </div>
+
+                    <!-- duplicated for smooth continuous loop -->
+                    <div class="testimonial-card">
+                        <div class="testimonial-text">"Quick approval and flexible terms. Perfect for my business needs."</div>
+                        <div class="testimonial-author">- John Banda</div>
+                    </div>
+                    <div class="testimonial-card">
+                        <div class="testimonial-text">"The best microfinance service in Blantyre. Highly recommended!"</div>
+                        <div class="testimonial-author">- Mary Chiwala</div>
+                    </div>
+                    <div class="testimonial-card">
+                        <div class="testimonial-text">"Professional service and fair rates. Helped me grow my business."</div>
+                        <div class="testimonial-author">- Paul Mthembu</div>
+                    </div>
+                    <div class="testimonial-card">
+                        <div class="testimonial-text">"mumakwana madolo, keep it up"</div>
+                        <div class="testimonial-author">- Kondwani Ngowela</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer" id="contact">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <h3>Renmal Capital Limited</h3>
+                    <p>Empowering Malawians with accessible microfinance solutions.</p>
+                </div>
+                <div class="footer-contact">
+                    <h4>Get In Touch</h4>
+                    <div class="footer-contact-items">
+                        <div class="footer-contact-item">
+                            <span class="icon">📞</span>
+                            <div>
+                                <div class="label">Phone</div>
+                                <div class="value">0883 96 85 86 | 0883 40 51 37<br>0988 77 83 03 | 0995 53 31 46</div>
+                            </div>
+                        </div>
+                        <div class="footer-contact-item">
+                            <span class="icon">📍</span>
+                            <div>
+                                <div class="label">Location</div>
+                                <div class="value">Blantyre, Malawi</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="footer-notice">
+                    <p><strong>Important:</strong> Collateral is a MUST for all loans</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Renmal Capital Limited. All rights reserved.</p>
+                <p>Website developed by <a href="https://www.afrisoft.online" target="_blank" rel="noopener noreferrer">www.afrisoft.online</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
