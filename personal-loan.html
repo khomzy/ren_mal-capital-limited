@@ -35,7 +35,7 @@
                     <p>Fill in your details below. Collateral is required for all loans.</p>
                 </div>
 
-                <form class="application-form" id="personalLoanForm" action="https://formspree.io/f/xrevqvpy" method="POST">
+                <form class="application-form" id="personalLoanForm" action="https://formspree.io/f/xrevqvpy" method="POST" enctype="multipart/form-data">
                     <div class="form-section">
                         <h3>Personal Information</h3>
                         <div class="form-row">
@@ -127,6 +127,42 @@
                             <label>Estimated Collateral Value (MWK) *</label>
                             <input type="number" name="collateralValue" required placeholder="2000000">
                         </div>
+                        <div class="form-group">
+                            <label>Collateral Photo(s)</label>
+                            <input type="file" name="collateralPhoto" accept="image/*" multiple>
+                            <small>Upload photos of the collateral for verification.</small>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3>Document Uploads</h3>
+                        <div class="upload-grid">
+                            <label class="upload-card">
+                                <span>Applicant photo</span>
+                                <small>Upload a clear passport-style photo.</small>
+                                <input type="file" name="applicantPhoto" accept="image/*" capture="environment">
+                            </label>
+                            <label class="upload-card">
+                                <span>National ID (front)</span>
+                                <small>Front side of your national ID card.</small>
+                                <input type="file" name="nationalIdFront" accept="image/*" capture="environment">
+                            </label>
+                            <label class="upload-card">
+                                <span>National ID (back)</span>
+                                <small>Back side of your national ID card.</small>
+                                <input type="file" name="nationalIdBack" accept="image/*" capture="environment">
+                            </label>
+                            <label class="upload-card">
+                                <span>Utility bill / payslip</span>
+                                <small>Water, electricity, or payslip to confirm residence or income.</small>
+                                <input type="file" name="utilityBill" accept="image/*" capture="environment">
+                            </label>
+                            <label class="upload-card">
+                                <span>Collateral photo(s)</span>
+                                <small>Upload collateral images to the collateral bucket.</small>
+                                <input type="file" name="collateralPhoto" accept="image/*" multiple>
+                            </label>
+                        </div>
                     </div>
 
                     <div class="form-section">
@@ -158,6 +194,8 @@
         </div>
     </section>
 
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-config.js"></script>
     <script src="script.js"></script>
 </body>
 </html>

@@ -155,6 +155,37 @@
                     </div>
 
                     <div class="form-section">
+                        <h3>Document Uploads</h3>
+                        <div class="upload-grid">
+                            <label class="upload-card">
+                                <span>Owner photo</span>
+                                <small>Upload a clear photo of the business owner.</small>
+                                <input type="file" name="ownerPhoto" accept="image/*" capture="environment">
+                            </label>
+                            <label class="upload-card">
+                                <span>National ID (front)</span>
+                                <small>Front side of the owner’s national ID.</small>
+                                <input type="file" name="nationalIdFront" accept="image/*" capture="environment">
+                            </label>
+                            <label class="upload-card">
+                                <span>National ID (back)</span>
+                                <small>Back side of the owner’s national ID.</small>
+                                <input type="file" name="nationalIdBack" accept="image/*" capture="environment">
+                            </label>
+                            <label class="upload-card">
+                                <span>Business licence</span>
+                                <small>Upload your business licence or registration document.</small>
+                                <input type="file" name="businessLicence" accept="image/*,.pdf">
+                            </label>
+                            <label class="upload-card">
+                                <span>Collateral photo(s)</span>
+                                <small>Upload collateral images for verification.</small>
+                                <input type="file" name="collateralPhoto" accept="image/*" multiple>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
                         <h3>Guarantor Information</h3>
                         <div class="form-row">
                             <div class="form-group">
@@ -189,6 +220,8 @@
         </div>
     </section>
 
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-config.js"></script>
     <script src="script.js"></script>
 </body>
 </html>

@@ -15,11 +15,21 @@
     --border: #E2E8F0;
 }
 
+html,
+body {
+    overflow-x: hidden;
+}
+
 body {
     font-family: 'Inter', sans-serif;
     color: var(--dark);
     line-height: 1.6;
-    overflow-x: hidden;
+}
+
+img,
+svg {
+    max-width: 100%;
+    height: auto;
 }
 
 .container {
@@ -167,27 +177,7 @@ body {
     position: relative;
     z-index: 1;
     text-align: center;
-}
-
-.hero-stats {
-    display: flex;
-    gap: 1.75rem;
-    margin-top: 2.5rem;
-    justify-content: center;
-    flex-wrap: wrap;
-}
-
-.hero-actions {
-    position: absolute;
-    right: 32%;
-    top: 12%;
-    transform: translate(0, 0);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1rem;
-    margin-top: 0;
-    z-index: 0;
+    color: #ffffff;
 }
 
 .hero-actions .btn {
@@ -213,11 +203,10 @@ body {
 }
 
 .hero-blue {
-    background: linear-gradient(135deg, rgba(14, 165, 233, 0.3), rgba(2, 132, 199, 0.2)), url("assets/images/sky-bg.jpg");
+    background: linear-gradient(135deg, rgba(14, 165, 233, 0.3), rgba(2, 132, 199, 0.2)), url("assets/images/loan2.jpg");
     background-size: cover;
-    background-position: center;
+    background-position: center center;
     background-repeat: no-repeat;
-    color: white;
 }
 
 .hero-green {
@@ -232,6 +221,7 @@ body {
     line-height: 1.05;
     text-align: left;
     max-width: 620px;
+    color: #ffffff;
 }
 
 .hero-subtitle {
@@ -241,13 +231,7 @@ body {
     text-align: left;
     max-width: 520px;
     width: min(100%, 520px);
-}
-
-.hero-stats {
-    display: flex;
-    gap: 1.75rem;
-    margin-top: 2.5rem;
-    justify-content: flex-start;
+    color: #ffffff;
     flex-wrap: wrap;
 }
 
@@ -264,17 +248,13 @@ body {
     font-size: 2.5rem;
     font-weight: 800;
     margin-bottom: 0.25rem;
+    color: #ffffff;
 }
 
 .stat-label {
     font-size: 0.875rem;
     opacity: 0.9;
-}
-
-/* Calculator Section */
-.calculator-section {
-    padding: 5rem 0;
-    background: var(--light);
+    color: #ffffff;
 }
 
 .calculator-wrapper {
@@ -588,14 +568,19 @@ input[type="range"]::-webkit-slider-thumb {
 /* Reveal on scroll */
 [data-reveal] {
     opacity: 0;
-    transform: translateY(20px);
-    transition: opacity 700ms cubic-bezier(.2,.8,.2,1), transform 700ms cubic-bezier(.2,.8,.2,1);
-    will-change: opacity, transform;
+    transform: translateY(24px) scale(0.98);
+    transition:
+        opacity 700ms cubic-bezier(.2, .8, .2, 1),
+        transform 700ms cubic-bezier(.2, .8, .2, 1),
+        filter 700ms cubic-bezier(.2, .8, .2, 1);
+    will-change: opacity, transform, filter;
+    filter: blur(6px);
 }
 
 [data-reveal].in-view {
     opacity: 1;
-    transform: none;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
 }
 
 /* Marquee / continuous testimonials */
@@ -812,6 +797,37 @@ input[type="range"]::-webkit-slider-thumb {
     margin-bottom: 1.5rem;
 }
 
+.upload-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+}
+
+.upload-card {
+    border: 2px dashed var(--border);
+    border-radius: 14px;
+    padding: 1rem;
+    background: #F8FAFC;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.upload-card span {
+    font-weight: 700;
+    color: var(--dark);
+}
+
+.upload-card small {
+    color: var(--gray);
+    line-height: 1.4;
+}
+
+.upload-card input {
+    margin-top: 0.5rem;
+    font-size: 0.95rem;
+}
+
 .form-actions {
     margin-top: 2rem;
 }
@@ -825,63 +841,108 @@ input[type="range"]::-webkit-slider-thumb {
 
 /* Responsive */
 @media (max-width: 768px) {
+    .upload-grid {
+        grid-template-columns: 1fr;
+    }
+
     .nav-menu {
         display: none;
     }
-    
-    .hero-title {
-        font-size: 2.5rem;
-    }
-    
-    .hero-stats {
-        flex-direction: column;
-        gap: 1.5rem;
-    }
-    
-    .calculator-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .form-row {
-        grid-template-columns: 1fr;
-    }
-    
-    .calculator-wrapper,
-    .application-form {
-        padding: 2rem 1.5rem;
-    }
-    
-    .hero .container {
-        flex-direction: column-reverse;
-        align-items: center;
-        justify-content: center;
-        gap: 1.5rem;
+
+    .container {
+        padding: 0 16px;
     }
 
-    .hero-content {
-        margin-right: 0;
-        padding-left: 0;
+    .hero {
+        min-height: auto;
+        padding-top: 2rem;
+    }
+
+    .hero-title {
+        font-size: 2rem;
+        line-height: 1.15;
         text-align: center;
         max-width: 100%;
     }
 
-    .hero-image {
-        max-height: 420px;
-        transform: translateY(0);
+    .hero-subtitle {
+        font-size: 1rem;
+        text-align: center;
+        max-width: 100%;
     }
 
     .hero-stats {
+        flex-direction: column;
+        gap: 1rem;
         justify-content: center;
+        align-items: stretch;
+    }
+
+    .calculator-grid,
+    .features-grid,
+    .testimonials-grid,
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+
+    .calculator-wrapper,
+    .application-form {
+        padding: 1.5rem;
+    }
+
+    .hero .container {
+        flex-direction: column-reverse;
+        align-items: center;
+        justify-content: center;
+        gap: 1rem;
+    }
+
+    .hero-content {
+        width: 100%;
+        max-width: 100%;
+        margin-right: 0;
+        padding-left: 0;
+        padding-right: 0;
+        transform: none;
+        text-align: center;
+    }
+
+    .hero-actions {
+        position: static;
+        transform: none;
+        width: 100%;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 0.75rem;
+    }
+
+    .hero-actions .btn {
+        width: 100%;
+        max-width: 280px;
+        min-width: 0;
+    }
+
+    .hero-image {
+        width: 100%;
+        max-width: 420px;
+        max-height: 340px;
+        transform: translateY(0);
     }
 
     .stat {
         text-align: center;
     }
-    
+
     .footer-content {
-        flex-direction: column;
+        display: grid;
+        grid-template-columns: 1fr;
         gap: 2rem;
         text-align: center;
+    }
+
+    .testimonial-card {
+        min-width: 0;
     }
 }
 
