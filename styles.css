@@ -180,26 +180,18 @@ svg {
     color: #ffffff;
 }
 
+.hero-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    margin-top: 1rem;
+    align-items: flex-start;
+}
+
 .hero-actions .btn {
-    min-width: 200px;
-    width: 220px;
+    min-width: 220px;
     border-radius: 999px;
     box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
-}
-
-.hero-image {
-    flex: 0 0 auto;
-    max-height: 700px;
-    width: auto;
-    object-fit: contain;
-    align-self: flex-end;
-    position: relative;
-    z-index: 2;
-    transform: translateY(0);
-}
-
-.hero-actions .btn {
-    min-width: 170px;
 }
 
 .hero-blue {
@@ -302,33 +294,65 @@ svg {
     display: flex;
     gap: 0.5rem;
     margin-bottom: 1rem;
-    flex-wrap: wrap;
+    overflow-x: auto;
+    padding-bottom: 0.5rem;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none;  /* IE and Edge */
+}
+
+.amount-buttons::-webkit-scrollbar,
+.term-buttons::-webkit-scrollbar {
+    display: none; /* Hide scrollbar for Chrome, Safari and Opera */
 }
 
 .amount-btn,
-.term-btn {
-    padding: 0.75rem 1.5rem;
+.term-btn,
+.amount-btn-input {
+    padding: 0.75rem 1rem;
     border: 2px solid var(--border);
     background: white;
     border-radius: 8px;
     cursor: pointer;
     font-weight: 600;
     transition: all 0.3s;
-    flex: 1;
-    min-width: 80px;
+    flex: 0 0 auto;
+    min-width: 100px;
+    text-align: center;
+}
+
+.amount-btn-input {
+    width: 100px;
+    font-family: inherit;
+    font-size: 1rem;
+    appearance: none;
+    -moz-appearance: textfield;
+}
+
+.amount-btn-input::-webkit-outer-spin-button,
+.amount-btn-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
 }
 
 .amount-btn:hover,
-.term-btn:hover {
+.term-btn:hover,
+.amount-btn-input:hover,
+.amount-btn-input:focus {
     border-color: var(--primary-blue);
     color: var(--primary-blue);
+    outline: none;
 }
 
 .amount-btn.active,
-.term-btn.active {
+.term-btn.active,
+.amount-btn-input.active {
     background: var(--primary-blue);
     color: white;
     border-color: var(--primary-blue);
+}
+
+.amount-btn-input.active::placeholder {
+    color: rgba(255, 255, 255, 0.7);
 }
 
 .term-btn small {
@@ -474,6 +498,22 @@ input[type="range"]::-webkit-slider-thumb {
 .feature-icon {
     font-size: 3rem;
     margin-bottom: 1rem;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.feature-icon img {
+    height: 100%;
+    width: auto;
+    object-fit: contain;
+}
+
+.feature-icon svg {
+    height: 100%;
+    width: auto;
+    color: var(--primary-blue);
 }
 
 .feature-card h3 {
@@ -663,6 +703,13 @@ input[type="range"]::-webkit-slider-thumb {
 .footer-contact-item .value {
     opacity: 0.9;
     font-size: 0.95rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.phone-number {
+    display: block;
 }
 
 .footer-notice {
@@ -911,10 +958,17 @@ input[type="range"]::-webkit-slider-thumb {
         position: static;
         transform: none;
         width: 100%;
-        flex-direction: row;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 0.75rem;
+        flex-direction: column;
+        align-items: center;
+        gap: 1.25rem;
+    }
+
+    .amount-buttons,
+    .term-buttons {
+        margin-left: -1.5rem;
+        margin-right: -1.5rem;
+        padding-left: 1.5rem;
+        padding-right: 1.5rem;
     }
 
     .hero-actions .btn {

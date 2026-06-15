@@ -74,10 +74,9 @@
                                 <button class="amount-btn active" data-amount="1000000">1M</button>
                                 <button class="amount-btn" data-amount="2000000">2M</button>
                                 <button class="amount-btn" data-amount="5000000">5M</button>
+                                <input type="number" id="customAmount" min="1000" max="100000000" step="1000" placeholder="---" class="amount-btn-input">
                             </div>
-                            <label class="custom-amount-label" for="customAmount">Custom Amount (MWK)</label>
-                            <input type="number" id="customAmount" min="100000" max="5000000" step="100000" placeholder="Enter your own amount" value="1000000">
-                            <input type="range" id="loanAmount" min="100000" max="5000000" step="100000" value="1000000">
+                            <input type="range" id="loanAmount" min="100000" max="5000000" step="1000" value="1000000">
                             <div class="input-value" id="amountValue">MWK 1,000,000</div>
                         </div>
 
@@ -137,12 +136,16 @@
             
             <div class="features-grid">
                 <div class="feature-card">
-                    <div class="feature-icon">⚡</div>
+                    <div class="feature-icon">
+                        <img src="assets/images/agent.avif" alt="Fast Approval">
+                    </div>
                     <h3>Fast Approval</h3>
                     <p>Get approved within 24 hours with minimal documentation</p>
                 </div>
                 <div class="feature-card">
-                    <div class="feature-icon">💰</div>
+                    <div class="feature-icon">
+                        <img src="assets/images/flexible.jpg" alt="Flexible Terms">
+                    </div>
                     <h3>Flexible Terms</h3>
                     <p>Choose from 1-4 weeks repayment periods</p>
                 </div>
@@ -219,7 +222,12 @@
                             <span class="icon">📞</span>
                             <div>
                                 <div class="label">Phone</div>
-                                <div class="value">0883 96 85 86 | 0883 40 51 37<br>0988 77 83 03 | 0995 53 31 46</div>
+                                <div class="value">
+                                    <div class="phone-number">0883 96 85 86</div>
+                                    <div class="phone-number">0883 40 51 37</div>
+                                    <div class="phone-number">0988 77 83 03</div>
+                                    <div class="phone-number">0995 53 31 46</div>
+                                </div>
                             </div>
                         </div>
                         <div class="footer-contact-item">
