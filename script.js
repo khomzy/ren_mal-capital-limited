@@ -23,18 +23,13 @@ document.addEventListener('DOMContentLoaded', function() {
         // Calculate loan
         function clampAmount(value) {
             const parsed = Number(value);
-            if (!Number.isFinite(parsed) || parsed < 0) return 0;
-            return parsed;
+            if (!Number.isFinite(parsed) || parsed < 100000) return 100000;
+            if (parsed > 5000000) return 5000000;
+            return Math.round(parsed / 100000) * 100000;
         }
 
-        function calculateLoan(customValue) {
-            let principal = customValue !== undefined ? clampAmount(customValue) : clampAmount(loanAmountSlider.value);
-
-            // Default to 1M for the display if everything is empty
-            if (principal === 0 && (!customAmountInput || customAmountInput.value === '')) {
-                principal = 1000000;
-            }
-
+        function calculateLoan() {
+            const principal = clampAmount(loanAmountSlider.value);
             const weeks = parseInt(loanTermSlider.value);
             let interestRate = 0;
             
@@ -49,24 +44,8 @@ document.addEventListener('DOMContentLoaded', function() {
             const interest = (principal * interestRate) / 100;
             const total = principal + interest;
             
-            // Sync slider if not currently being touched
-            if (loanAmountSlider && customValue !== undefined) {
-                loanAmountSlider.value = Math.min(principal, 5000000);
-            }
-
-            if (customAmountInput) {
-                // Font scaling
-                const length = String(principal).length;
-                if (length > 9) {
-                    customAmountInput.style.fontSize = '0.65rem';
-                } else if (length > 7) {
-                    customAmountInput.style.fontSize = '0.75rem';
-                } else if (length > 6) {
-                    customAmountInput.style.fontSize = '0.85rem';
-                } else {
-                    customAmountInput.style.fontSize = '1rem';
-                }
-            }
+            if (loanAmountSlider) loanAmountSlider.value = principal;
+            if (customAmountInput) customAmountInput.value = principal;
 
             // Update display
             if (amountValue) amountValue.textContent = formatMWK(principal);
@@ -78,14 +57,8 @@ document.addEventListener('DOMContentLoaded', function() {
             
             // Update active buttons
             amountButtons.forEach(btn => {
-                const btnAmount = parseInt(btn.dataset.amount);
-                btn.classList.toggle('active', btnAmount === principal);
+                btn.classList.toggle('active', parseInt(btn.dataset.amount) === principal);
             });
-
-            if (customAmountInput) {
-                const isPreset = Array.from(amountButtons).some(btn => parseInt(btn.dataset.amount) === principal);
-                customAmountInput.classList.toggle('active', !isPreset && customAmountInput.value !== '');
-            }
 
             termButtons.forEach(btn => {
                 btn.classList.toggle('active', parseInt(btn.dataset.weeks) === weeks);
@@ -94,22 +67,18 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Event listeners
         loanAmountSlider.addEventListener('input', function() {
-            if (customAmountInput) customAmountInput.value = ''; // Clear typing box
+            const principal = clampAmount(loanAmountSlider.value);
+            loanAmountSlider.value = principal;
+            if (customAmountInput) customAmountInput.value = principal;
             calculateLoan();
         });
 
         if (customAmountInput) {
             customAmountInput.addEventListener('input', function() {
-                const val = customAmountInput.value;
-                if (val === '') {
-                    calculateLoan(0);
-                    return;
-                }
-
-                const num = parseInt(val);
-                if (isNaN(num)) return;
-
-                calculateLoan(num);
+                const principal = clampAmount(customAmountInput.value);
+                if (loanAmountSlider) loanAmountSlider.value = principal;
+                customAmountInput.value = principal;
+                calculateLoan();
             });
         }
 
@@ -120,7 +89,6 @@ document.addEventListener('DOMContentLoaded', function() {
             btn.addEventListener('click', function() {
                 const amount = parseInt(this.dataset.amount);
                 loanAmountSlider.value = amount;
-                if (customAmountInput) customAmountInput.value = ''; // Clear typing box
                 calculateLoan();
             });
         });
