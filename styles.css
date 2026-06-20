@@ -888,6 +888,10 @@ input[type="range"]::-webkit-slider-thumb {
 
 /* Responsive */
 @media (max-width: 768px) {
+    .hide-mobile {
+        display: none !important;
+    }
+
     .upload-grid {
         grid-template-columns: 1fr;
     }
@@ -932,43 +936,33 @@ input[type="range"]::-webkit-slider-thumb {
         grid-template-columns: 1fr;
     }
 
-    .calculator-wrapper,
-    .application-form {
-        padding: 1.5rem;
-    }
-
-    .hero .container {
-        flex-direction: column-reverse;
-        align-items: center;
-        justify-content: center;
-        gap: 1rem;
-    }
-
-    .hero-content {
+    .calculator-wrapper {
+        padding: 1.5rem 0.75rem;
         width: 100%;
-        max-width: 100%;
-        margin-right: 0;
-        padding-left: 0;
-        padding-right: 0;
-        transform: none;
-        text-align: center;
+        overflow-x: hidden;
+        border-radius: 12px;
     }
 
-    .hero-actions {
-        position: static;
-        transform: none;
+    .calculator-inputs, .calculator-results {
         width: 100%;
-        flex-direction: column;
-        align-items: center;
-        gap: 1.25rem;
     }
 
-    .amount-buttons,
-    .term-buttons {
-        margin-left: -1.5rem;
-        margin-right: -1.5rem;
-        padding-left: 1.5rem;
-        padding-right: 1.5rem;
+    .amount-buttons, .term-buttons {
+        display: flex;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        justify-content: flex-start;
+        -webkit-overflow-scrolling: touch;
+        margin-bottom: 1.5rem;
+    }
+
+    .amount-btn, .term-btn, .amount-btn-input {
+        flex: 0 0 auto;
+        margin-right: 0.5rem;
+    }
+
+    .amount-btn, .amount-btn-input {
+        min-width: 80px;
     }
 
     .hero-actions .btn {
@@ -989,10 +983,30 @@ input[type="range"]::-webkit-slider-thumb {
     }
 
     .footer-content {
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: 2rem;
+        display: flex;
+        flex-direction: column;
+        gap: 2.5rem;
         text-align: center;
+        align-items: center;
+    }
+
+    .footer-brand, .footer-contact {
+        width: 100%;
+    }
+
+    .footer-contact-item {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 0.5rem;
+    }
+
+    .footer-contact-item .icon {
+        margin-bottom: 0.25rem;
+    }
+
+    .footer-contact-item .value {
+        align-items: center;
     }
 
     .testimonial-card {
