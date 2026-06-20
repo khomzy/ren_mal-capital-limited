@@ -69,11 +69,11 @@
                         <div class="input-group">
                             <label>Loan Amount (MWK)</label>
                             <div class="amount-buttons">
-                                <button class="amount-btn" data-amount="100000">100K</button>
-                                <button class="amount-btn" data-amount="500000">500K</button>
-                                <button class="amount-btn active" data-amount="1000000">1M</button>
-                                <button class="amount-btn" data-amount="2000000">2M</button>
-                                <button class="amount-btn" data-amount="5000000">5M</button>
+                                <button type="button" class="amount-btn" data-amount="100000">100K</button>
+                                <button type="button" class="amount-btn" data-amount="500000">500K</button>
+                                <button type="button" class="amount-btn active" data-amount="1000000">1M</button>
+                                <button type="button" class="amount-btn" data-amount="2000000">2M</button>
+                                <button type="button" class="amount-btn" data-amount="5000000">5M</button>
                             </div>
                             <label class="custom-amount-label" for="customAmount">Custom Amount (MWK)</label>
                             <input type="number" id="customAmount" min="100000" max="5000000" step="100000" placeholder="Enter your own amount" value="1000000">
@@ -84,10 +84,10 @@
                         <div class="input-group">
                             <label>Loan Term (Weeks)</label>
                             <div class="term-buttons">
-                                <button class="term-btn" data-weeks="1">1 Week<br><small>20%</small></button>
-                                <button class="term-btn" data-weeks="2">2 Weeks<br><small>30%</small></button>
-                                <button class="term-btn active" data-weeks="3">3 Weeks<br><small>40%</small></button>
-                                <button class="term-btn" data-weeks="4">4 Weeks<br><small>50%</small></button>
+                                <button type="button" class="term-btn" data-weeks="1">1 Week<br><small>20%</small></button>
+                                <button type="button" class="term-btn" data-weeks="2">2 Weeks<br><small>30%</small></button>
+                                <button type="button" class="term-btn active" data-weeks="3">3 Weeks<br><small>40%</small></button>
+                                <button type="button" class="term-btn" data-weeks="4">4 Weeks<br><small>50%</small></button>
                             </div>
                             <input type="range" id="loanTerm" min="1" max="4" step="1" value="3">
                             <div class="input-value" id="termValue">3 Weeks</div>

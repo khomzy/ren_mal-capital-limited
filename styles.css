@@ -18,6 +18,7 @@
 html,
 body {
     overflow-x: hidden;
+    width: 100%;
 }
 
 body {
@@ -281,7 +282,7 @@ svg {
 
 .calculator-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     gap: 3rem;
 }
 
@@ -295,6 +296,21 @@ svg {
     font-weight: 600;
     margin-bottom: 0.75rem;
     color: var(--dark);
+}
+
+#customAmount {
+    width: 100%;
+    padding: 0.75rem;
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+#customAmount:focus {
+    outline: none;
+    border-color: var(--primary-blue);
 }
 
 .amount-buttons,
@@ -375,11 +391,17 @@ input[type="range"]::-webkit-slider-thumb {
 }
 
 /* Calculator Results */
+.calculator-inputs,
+.calculator-results {
+    min-width: 0;
+}
+
 .result-card {
     background: linear-gradient(135deg, #F0F9FF 0%, #E0F2FE 100%);
     border-radius: 16px;
     padding: 2.5rem;
     border: 2px solid #BAE6FD;
+    min-width: 0;
 }
 
 .result-card h3 {
@@ -405,6 +427,7 @@ input[type="range"]::-webkit-slider-thumb {
     font-size: 3rem;
     font-weight: 800;
     color: var(--primary-blue);
+    overflow-wrap: anywhere;
 }
 
 .result-details {
@@ -890,6 +913,75 @@ input[type="range"]::-webkit-slider-thumb {
         padding: 1.5rem;
     }
 
+    .calculator-wrapper {
+        border-radius: 14px;
+    }
+
+    .calculator-header {
+        margin-bottom: 2rem;
+    }
+
+    .calculator-header h2,
+    .section-header h2,
+    .contact-info h2,
+    .form-header h1 {
+        font-size: 2rem;
+    }
+
+    .calculator-grid {
+        gap: 1.5rem;
+    }
+
+    .amount-buttons,
+    .term-buttons {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        overscroll-behavior-inline: contain;
+        scroll-snap-type: x proximity;
+        padding-bottom: 0.35rem;
+        margin-inline: -0.25rem;
+        padding-inline: 0.25rem;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .amount-btn,
+    .term-btn {
+        flex: 0 0 7rem;
+        min-width: 7rem;
+        padding: 0.75rem 0.85rem;
+        scroll-snap-align: start;
+    }
+
+    .result-card {
+        padding: 1.25rem;
+        border-radius: 14px;
+    }
+
+    .result-card h3 {
+        font-size: 1.25rem;
+        margin-bottom: 1.25rem;
+    }
+
+    .result-main {
+        margin-bottom: 1.25rem;
+        padding-bottom: 1.25rem;
+    }
+
+    .result-amount {
+        font-size: clamp(2rem, 12vw, 2.65rem);
+        line-height: 1.1;
+    }
+
+    .result-item {
+        gap: 1rem;
+        align-items: center;
+    }
+
+    .result-item span:last-child {
+        text-align: right;
+        overflow-wrap: anywhere;
+    }
+
     .hero .container {
         flex-direction: column-reverse;
         align-items: center;
@@ -941,8 +1033,44 @@ input[type="range"]::-webkit-slider-thumb {
         text-align: center;
     }
 
+    .footer-contact h4 {
+        text-align: center;
+    }
+
+    .footer-contact-item {
+        justify-content: center;
+        text-align: center;
+    }
+
+    .footer-contact-item .icon {
+        display: none;
+    }
+
     .testimonial-card {
         min-width: 0;
+    }
+}
+
+@media (max-width: 420px) {
+    .container {
+        padding: 0 12px;
+    }
+
+    .calculator-wrapper,
+    .application-form {
+        padding: 1rem;
+    }
+
+    .result-card {
+        padding: 1rem;
+    }
+
+    .result-amount {
+        font-size: clamp(1.75rem, 10vw, 2.25rem);
+    }
+
+    .footer {
+        padding-top: 2.5rem;
     }
 }
 

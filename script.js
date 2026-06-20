@@ -75,6 +75,18 @@ document.addEventListener('DOMContentLoaded', function() {
 
         if (customAmountInput) {
             customAmountInput.addEventListener('input', function() {
+                const typedAmount = Number(customAmountInput.value);
+
+                if (!Number.isFinite(typedAmount) || typedAmount < 100000 || typedAmount > 5000000) {
+                    return;
+                }
+
+                const principal = clampAmount(typedAmount);
+                if (loanAmountSlider) loanAmountSlider.value = principal;
+                calculateLoan();
+            });
+
+            customAmountInput.addEventListener('change', function() {
                 const principal = clampAmount(customAmountInput.value);
                 if (loanAmountSlider) loanAmountSlider.value = principal;
                 customAmountInput.value = principal;
