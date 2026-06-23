@@ -1,247 +1,907 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Renmal Capital Limited - Get Your Loan Today</title>
-    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        navy: { 900:'#060b18', 800:'#0d1425', 700:'#131d38', 600:'#1a2747' },
+                        brand: { 400:'#60a5fa', 500:'#3b82f6', 600:'#2563eb', 700:'#1d4ed8' },
+                        gold: { 400:'#fbbf24', 500:'#f59e0b' }
+                    },
+                    fontFamily: { inter:['Inter','sans-serif'] }
+                }
+            }
+        }
+    </script>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:'Inter',sans-serif;background:#060b18;color:#f1f5f9;overflow-x:hidden}
+        ::-webkit-scrollbar{width:6px}
+        ::-webkit-scrollbar-track{background:#0d1425}
+        ::-webkit-scrollbar-thumb{background:#2563eb;border-radius:3px}
+
+        .nav-glass{background:rgba(6,11,24,0.85);backdrop-filter:blur(20px);border-bottom:1px solid rgba(37,99,235,0.1)}
+        .nav-link{position:relative;color:#94a3b8;transition:color .3s}
+        .nav-link:hover,.nav-link.active{color:#f1f5f9}
+        .nav-link.active::after{content:'';position:absolute;bottom:-4px;left:0;right:0;height:2px;background:#2563eb;border-radius:1px}
+
+        .hero-section{position:relative;min-height:100vh;display:flex;align-items:center;overflow:hidden}
+        #particleCanvas{position:absolute;inset:0;width:100%;height:100%;z-index:0}
+        .hero-glow{position:absolute;width:500px;height:500px;border-radius:50%;filter:blur(120px);opacity:.15;pointer-events:none}
+        .stat-card{background:rgba(15,25,50,0.6);backdrop-filter:blur(12px);border:1px solid rgba(37,99,235,0.15);border-radius:16px;padding:20px 24px;text-align:center;transition:all .3s}
+        .stat-card:hover{border-color:rgba(37,99,235,0.4);transform:translateY(-4px)}
+
+        .btn-primary{background:linear-gradient(135deg,#2563eb,#1d4ed8);color:#fff;padding:14px 32px;border-radius:12px;font-weight:600;border:none;cursor:pointer;transition:all .3s;display:inline-flex;align-items:center;gap:8px;font-size:15px;text-decoration:none}
+        .btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(37,99,235,0.4)}
+        .btn-secondary{background:rgba(37,99,235,0.1);color:#60a5fa;padding:14px 32px;border-radius:12px;font-weight:600;border:1px solid rgba(37,99,235,0.3);cursor:pointer;transition:all .3s;display:inline-flex;align-items:center;gap:8px;font-size:15px;text-decoration:none}
+        .btn-secondary:hover{background:rgba(37,99,235,0.2);transform:translateY(-2px)}
+
+        .feature-card-img{position:relative;border-radius:20px;overflow:hidden;min-height:340px;background-size:cover;background-position:center;transition:all .5s cubic-bezier(.4,0,.2,1);border:1px solid rgba(148,163,184,0.08)}
+        .feature-card-img:hover{transform:translateY(-8px);box-shadow:0 24px 60px rgba(0,0,0,0.4);border-color:rgba(37,99,235,0.3)}
+        .feature-card-overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(6,11,24,0.15) 0%,rgba(6,11,24,0.6) 35%,rgba(6,11,24,0.95) 100%);z-index:1;transition:background .5s}
+        .feature-card-img:hover .feature-card-overlay{background:linear-gradient(180deg,rgba(6,11,24,0.1) 0%,rgba(6,11,24,0.45) 35%,rgba(6,11,24,0.92) 100%)}
+        .feature-card-content{position:relative;z-index:2;padding:28px;height:100%;display:flex;flex-direction:column;justify-content:flex-end}
+        .feature-icon-wrap{width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,rgba(37,99,235,0.25),rgba(37,99,235,0.08));border:1px solid rgba(37,99,235,0.25);margin-bottom:16px;backdrop-filter:blur(8px)}
+
+        .calc-range{-webkit-appearance:none;appearance:none;width:100%;height:6px;border-radius:3px;background:linear-gradient(90deg,#2563eb 0%,#1e3a5f 100%);outline:none}
+        .calc-range::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:22px;height:22px;border-radius:50%;background:#2563eb;cursor:pointer;border:3px solid #060b18;box-shadow:0 0 10px rgba(37,99,235,0.5);transition:transform .2s}
+        .calc-range::-webkit-slider-thumb:hover{transform:scale(1.2)}
+        .calc-range::-moz-range-thumb{width:22px;height:22px;border-radius:50%;background:#2563eb;cursor:pointer;border:3px solid #060b18}
+        .amount-btn,.term-btn{padding:8px 16px;border-radius:8px;border:1px solid rgba(148,163,184,0.15);background:rgba(15,25,50,0.5);color:#94a3b8;cursor:pointer;transition:all .2s;font-size:13px;font-weight:500}
+        .amount-btn.active,.term-btn.active{background:rgba(37,99,235,0.2);border-color:#2563eb;color:#60a5fa}
+        .amount-btn:hover,.term-btn:hover{border-color:rgba(37,99,235,0.4);color:#f1f5f9}
+        .custom-input-box{background:rgba(6,11,24,0.9);border:1px solid rgba(148,163,184,0.12);border-radius:10px;padding:10px 14px;color:#f1f5f9;font-size:14px;font-family:'Inter',sans-serif;outline:none;transition:border-color .2s;flex:1}
+        .custom-input-box:focus{border-color:#2563eb;box-shadow:0 0 0 3px rgba(37,99,235,0.15)}
+        .custom-input-box::placeholder{color:#475569}
+        .result-box{background:linear-gradient(135deg,rgba(37,99,235,0.15),rgba(15,25,50,0.8));border:1px solid rgba(37,99,235,0.2);border-radius:16px;padding:32px}
+        .glass-card{background:rgba(15,25,50,0.5);backdrop-filter:blur(16px);border:1px solid rgba(148,163,184,0.08);border-radius:20px;transition:all .4s}
+
+        .marquee-container{overflow:hidden;mask-image:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent);-webkit-mask-image:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent)}
+        .marquee-track{display:flex;gap:24px;animation:marquee 30s linear infinite;width:max-content}
+        .marquee-track:hover{animation-play-state:paused}
+        @keyframes marquee{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+        .testimonial-card{min-width:280px;max-width:380px;padding:24px;background:rgba(15,25,50,0.5);backdrop-filter:blur(12px);border:1px solid rgba(148,163,184,0.08);border-radius:16px;flex-shrink:0}
+
+        .tab-btn{padding:14px 24px;border-radius:12px;font-weight:600;font-size:14px;cursor:pointer;transition:all .3s;border:1px solid transparent;background:transparent;color:#94a3b8}
+        .tab-btn.active{background:rgba(37,99,235,0.15);border-color:rgba(37,99,235,0.3);color:#60a5fa}
+        .tab-btn:hover:not(.active){color:#f1f5f9;background:rgba(255,255,255,0.03)}
+        .form-panel{display:none;animation:fadeUp .4s ease}
+        .form-panel.active{display:block}
+        @keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+
+        .form-group label{display:block;font-size:13px;font-weight:500;color:#94a3b8;margin-bottom:6px}
+        .form-input{width:100%;padding:12px 16px;background:rgba(15,25,50,0.6);border:1px solid rgba(148,163,184,0.12);border-radius:10px;color:#f1f5f9;font-size:14px;font-family:'Inter',sans-serif;transition:border-color .2s;outline:none}
+        .form-input:focus{border-color:#2563eb;box-shadow:0 0 0 3px rgba(37,99,235,0.15)}
+        .form-input::placeholder{color:#475569}
+        select.form-input{cursor:pointer}
+        select.form-input option{background:#0d1425;color:#f1f5f9}
+        textarea.form-input{resize:vertical;min-height:80px}
+        .upload-card{display:flex;flex-direction:column;gap:4px;padding:16px;background:rgba(15,25,50,0.4);border:1px dashed rgba(148,163,184,0.15);border-radius:12px;cursor:pointer;transition:all .3s}
+        .upload-card:hover{border-color:rgba(37,99,235,0.4);background:rgba(37,99,235,0.05)}
+        .upload-card input[type="file"]{display:none}
+        .alert-box{background:rgba(245,158,11,0.1);border:1px solid rgba(245,158,11,0.25);border-radius:10px;padding:12px 16px;font-size:13px;color:#fbbf24;margin-bottom:16px}
+        .form-section-title{font-size:16px;font-weight:600;color:#f1f5f9;margin-bottom:16px;padding-bottom:8px;border-bottom:1px solid rgba(148,163,184,0.08)}
+        .btn-submit{width:100%;padding:16px;background:linear-gradient(135deg,#2563eb,#1d4ed8);color:#fff;border:none;border-radius:12px;font-size:16px;font-weight:700;cursor:pointer;transition:all .3s;font-family:'Inter',sans-serif}
+        .btn-submit:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(37,99,235,0.4)}
+        .btn-submit:disabled{opacity:.6;cursor:not-allowed;transform:none;box-shadow:none}
+
+        .mobile-menu{position:fixed;inset:0;z-index:100;background:rgba(6,11,24,0.98);backdrop-filter:blur(20px);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:32px;transform:translateX(100%);transition:transform .4s cubic-bezier(.4,0,.2,1)}
+        .mobile-menu.open{transform:translateX(0)}
+        .mobile-menu a{font-size:24px;font-weight:600;color:#94a3b8;transition:color .3s;text-decoration:none}
+        .mobile-menu a:hover{color:#60a5fa}
+        .hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;z-index:110;padding:4px}
+        .hamburger span{width:24px;height:2px;background:#f1f5f9;border-radius:2px;transition:all .3s}
+        .hamburger.open span:nth-child(1){transform:rotate(45deg) translate(5px,5px)}
+        .hamburger.open span:nth-child(2){opacity:0}
+        .hamburger.open span:nth-child(3){transform:rotate(-45deg) translate(5px,-5px)}
+
+        .reveal{opacity:0;transform:translateY(30px);transition:all .8s cubic-bezier(.4,0,.2,1)}
+        .reveal.visible{opacity:1;transform:translateY(0)}
+        .toast{position:fixed;bottom:24px;right:24px;left:24px;padding:16px 20px;border-radius:12px;font-size:14px;font-weight:500;z-index:200;transform:translateY(120%);transition:transform .4s cubic-bezier(.4,0,.2,1);max-width:400px;margin-left:auto}
+        .toast.show{transform:translateY(0)}
+        .toast-success{background:rgba(16,185,129,0.15);border:1px solid rgba(16,185,129,0.3);color:#34d399}
+        .toast-error{background:rgba(239,68,68,0.15);border:1px solid rgba(239,68,68,0.3);color:#f87171}
+
+        @media(max-width:1024px){
+            .features-grid-responsive{grid-template-columns:1fr!important}
+            .feature-card-img{min-height:280px}
+        }
+        @media(max-width:768px){
+            .hamburger{display:flex}
+            .desktop-nav{display:none!important}
+            .stat-grid{grid-template-columns:1fr!important}
+            .calc-grid{grid-template-columns:1fr!important}
+            .form-row{grid-template-columns:1fr!important}
+            .upload-grid{grid-template-columns:1fr!important}
+            .footer-grid{grid-template-columns:1fr!important}
+            .toast{bottom:16px;right:16px;left:16px}
+            .hero-title{font-size:2.5rem!important}
+            .tab-btn{padding:12px 16px;font-size:13px}
+        }
+        @media(max-width:480px){
+            .hero-title{font-size:2rem!important}
+            .stat-card{padding:14px 16px}
+            .glass-card{padding:16px!important}
+            .amount-btn,.term-btn{padding:6px 12px;font-size:12px}
+        }
+    </style>
 </head>
 <body>
-    <!-- Navigation -->
-    <nav class="navbar">
-        <div class="container">
-            <div class="nav-wrapper">
-                    <div class="logo">
-                    <img src="assets/images/renmal-logo.png" alt="Renmal Capital Limited" class="logo-image">
-                    <span class="logo-text">Renmal Capital Limited</span>
-                </div>
-                <ul class="nav-menu">
-                    <li><a href="index.html" class="active">Home</a></li>
-                    <li><a href="#features">Features</a></li>
-                    <li><a href="#calculator">Calculator</a></li>
-                    <li><a href="#contact">Contact</a></li>
-                </ul>
+
+<div id="toast" class="toast"></div>
+
+<div id="mobileMenu" class="mobile-menu">
+    <a href="#hero" onclick="closeMobile()">Home</a>
+    <a href="#features" onclick="closeMobile()">Features</a>
+    <a href="#calculator" onclick="closeMobile()">Calculator</a>
+    <a href="#apply" onclick="closeMobile()">Apply Now</a>
+    <a href="#contact" onclick="closeMobile()">Contact</a>
+</div>
+
+<nav class="nav-glass fixed top-0 left-0 right-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
+        <a href="#hero" class="flex items-center gap-3 no-underline">
+            <img src="assets/images/renmal-logo.png" alt="Renmal Capital" class="h-9 sm:h-10 w-auto rounded-lg">
+            <span class="text-base sm:text-lg font-bold text-white hidden sm:block">Renmal Capital</span>
+        </a>
+        <div class="desktop-nav flex items-center gap-8" style="display:flex">
+            <a href="#hero" class="nav-link active text-sm font-medium no-underline">Home</a>
+            <a href="#features" class="nav-link text-sm font-medium no-underline">Features</a>
+            <a href="#calculator" class="nav-link text-sm font-medium no-underline">Calculator</a>
+            <a href="#apply" class="btn-primary text-sm" style="padding:10px 24px">Apply Now</a>
+        </div>
+        <div id="hamburger" class="hamburger" onclick="toggleMobile()">
+            <span></span><span></span><span></span>
+        </div>
+    </div>
+</nav>
+
+<!-- HERO SECTION — no image, full particles -->
+<section id="hero" class="hero-section">
+    <canvas id="particleCanvas"></canvas>
+    <div class="hero-glow" style="background:#2563eb;top:-100px;left:-100px"></div>
+    <div class="hero-glow" style="background:#7c3aed;bottom:-150px;right:-100px"></div>
+    <div class="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 w-full pt-28 pb-20 text-center">
+        <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-brand-600/10 border border-brand-600/20 text-brand-400 text-xs font-semibold uppercase tracking-wider mb-6">
+            <span class="w-2 h-2 rounded-full bg-brand-400 animate-pulse"></span>
+            Trusted Microfinance in Malawi
+        </div>
+        <h1 class="hero-title text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight mb-6" style="font-size:3.5rem">
+            Get Your <br>
+            <span class="bg-gradient-to-r from-brand-400 via-brand-500 to-purple-400 bg-clip-text text-transparent">Loan Today</span>
+        </h1>
+        <p class="text-base sm:text-lg text-slate-400 max-w-xl mx-auto mb-10 leading-relaxed">
+            Quick, affordable microfinance loans tailored for your needs. Fast approval, flexible repayment terms, and dedicated support.
+        </p>
+        <div class="stat-grid grid grid-cols-3 gap-3 sm:gap-4 mb-10 max-w-lg mx-auto">
+            <div class="stat-card">
+                <div class="text-brand-400 font-bold text-sm sm:text-lg">MWK 100K–5M</div>
+                <div class="text-slate-500 text-xs mt-1">Loan Amount</div>
+            </div>
+            <div class="stat-card">
+                <div class="text-brand-400 font-bold text-sm sm:text-lg">24hrs</div>
+                <div class="text-slate-500 text-xs mt-1">Quick Approval</div>
+            </div>
+            <div class="stat-card">
+                <div class="text-brand-400 font-bold text-sm sm:text-lg">98%</div>
+                <div class="text-slate-500 text-xs mt-1">Success Rate</div>
             </div>
         </div>
-    </nav>
-
-    <!-- Hero Section -->
-    <section class="hero hero-blue" data-reveal>
-        <div class="container">
-            <img src="assets/images/hero-people.png" alt="Professional Woman" class="hero-image">
-            <div class="hero-content">
-                <h1 class="hero-title">Get Your Loan Today</h1>
-                <p class="hero-subtitle">Quick, affordable microfinance loans tailored for your needs. Fast approval, flexible repayment terms.</p>
-                <div class="hero-stats">
-                    <div class="stat">
-                        <div class="stat-value">MWK 100K - 5M</div>
-                        <div class="stat-label">Loan Amount</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-value">24hrs</div>
-                        <div class="stat-label">Quick Approval</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-value">98%</div>
-                        <div class="stat-label">Success Rate</div>
-                    </div>
-                </div>
-                <div class="hero-actions">
-                    <a href="business-loan.html" class="btn btn-primary">Business Loan</a>
-                    <a href="personal-loan.html" class="btn btn-secondary">Personal Loan</a>
-                </div>
-            </div>
+        <div class="flex flex-wrap justify-center gap-4">
+            <a href="#apply" class="btn-primary" onclick="switchTab('business')">
+                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 7H4a2 2 0 00-2 2v10a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2zM16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/></svg>
+                Business Loan
+            </a>
+            <a href="#apply" class="btn-secondary" onclick="switchTab('personal')">
+                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+                Personal Loan
+            </a>
         </div>
-    </section>
-
-    <!-- Loan Calculator Section -->
-    <section id="calculator" class="calculator-section" data-reveal>
-        <div class="container">
-            <div class="calculator-wrapper">
-                <div class="calculator-header">
-                    <h2>Calculate Your Loan</h2>
-                    <p>Estimate your monthly payment or loan amount easily</p>
-                </div>
-                
-                <div class="calculator-grid">
-                    <div class="calculator-inputs">
-                        <div class="input-group">
-                            <label>Loan Amount (MWK)</label>
-                            <div class="amount-buttons">
-                                <button type="button" class="amount-btn" data-amount="100000">100K</button>
-                                <button type="button" class="amount-btn" data-amount="500000">500K</button>
-                                <button type="button" class="amount-btn active" data-amount="1000000">1M</button>
-                                <button type="button" class="amount-btn" data-amount="2000000">2M</button>
-                                <button type="button" class="amount-btn" data-amount="5000000">5M</button>
-                            </div>
-                            <label class="custom-amount-label" for="customAmount">Custom Amount (MWK)</label>
-                            <input type="number" id="customAmount" min="100000" max="5000000" step="100000" placeholder="Enter your own amount" value="1000000">
-                            <input type="range" id="loanAmount" min="100000" max="5000000" step="100000" value="1000000">
-                            <div class="input-value" id="amountValue">MWK 1,000,000</div>
-                        </div>
-
-                        <div class="input-group">
-                            <label>Loan Term (Weeks)</label>
-                            <div class="term-buttons">
-                                <button type="button" class="term-btn" data-weeks="1">1 Week<br><small>20%</small></button>
-                                <button type="button" class="term-btn" data-weeks="2">2 Weeks<br><small>30%</small></button>
-                                <button type="button" class="term-btn active" data-weeks="3">3 Weeks<br><small>40%</small></button>
-                                <button type="button" class="term-btn" data-weeks="4">4 Weeks<br><small>50%</small></button>
-                            </div>
-                            <input type="range" id="loanTerm" min="1" max="4" step="1" value="3">
-                            <div class="input-value" id="termValue">3 Weeks</div>
-                        </div>
-
-                        <div class="input-group">
-                            <label>Interest Rate (%)</label>
-                            <input type="number" id="interestRate" value="40" readonly>
-                        </div>
-                    </div>
-
-                    <div class="calculator-results">
-                        <div class="result-card">
-                            <h3>Repayment Summary</h3>
-                            <div class="result-main">
-                                <div class="result-label">Total Repayment</div>
-                                <div class="result-amount" id="totalRepayment">MWK 1,400,000</div>
-                            </div>
-                            <div class="result-details">
-                                <div class="result-item">
-                                    <span>Principal</span>
-                                    <span id="principalAmount">MWK 1,000,000</span>
-                                </div>
-                                <div class="result-item">
-                                    <span>Interest</span>
-                                    <span id="interestAmount">MWK 400,000</span>
-                                </div>
-                            </div>
-                            <div class="result-actions">
-                                <a href="personal-loan.html" class="btn btn-primary">Personal Loan</a>
-                                <a href="business-loan.html" class="btn btn-secondary">Business Loan</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+    </div>
+    <div class="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2 opacity-50">
+        <span class="text-xs text-slate-500">Scroll</span>
+        <div class="w-5 h-8 border border-slate-600 rounded-full flex justify-center pt-1.5">
+            <div class="w-1 h-2 bg-brand-400 rounded-full animate-bounce"></div>
         </div>
-    </section>
+    </div>
+</section>
 
-    <!-- Features Section -->
-    <section id="features" class="features-section" data-reveal>
-        <div class="container">
-            <div class="section-header">
-                <h2>Why Choose Renmal Capital?</h2>
-                <p>We provide fast, reliable microfinance solutions</p>
+<!-- FEATURES SECTION -->
+<section id="features" class="py-20 sm:py-24 relative">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6">
+        <div class="text-center mb-12 sm:mb-16 reveal">
+            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-brand-600/10 border border-brand-600/20 text-brand-400 text-xs font-semibold uppercase tracking-wider mb-4">Why Choose Us</div>
+            <h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold mb-4">Why Choose Renmal Capital?</h2>
+            <p class="text-slate-400 max-w-xl mx-auto text-sm sm:text-base">We provide fast, reliable microfinance solutions built around your needs</p>
+        </div>
+        <div class="features-grid-responsive grid md:grid-cols-3 gap-5 sm:gap-6 reveal" style="grid-template-columns:repeat(3,1fr)">
+            <div class="feature-card-img" style="background-image:url('https://z-cdn-media.chatglm.cn/files/114c8f81-2824-4b12-956d-e45a674c6127.png?auth_key=1882219294-ebce6d96444b4c3a9508ebc83eaa9ea4-0-a21eba2f6b9397919ea67d5be2011625')">
+                <div class="feature-card-overlay"></div>
+                <div class="feature-card-content">
+                    <div class="feature-icon-wrap">
+                        <svg width="26" height="26" fill="none" stroke="#60a5fa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+                            <circle cx="12" cy="12" r="10"/>
+                            <polyline points="12 6 12 12 16 14"/>
+                            <path d="M19.5 4.5l2-2" stroke-width="2.5" stroke-linecap="round"/>
+                            <path d="M21 7l-1.5-1" stroke-width="2" stroke-linecap="round" opacity=".5"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-lg sm:text-xl font-bold mb-2">Fast Approval</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed">Get approved within 24 hours with minimal documentation and a streamlined process.</p>
+                </div>
             </div>
-            
-            <div class="features-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">⚡</div>
-                    <h3>Fast Approval</h3>
-                    <p>Get approved within 24 hours with minimal documentation</p>
+            <div class="feature-card-img" style="background-image:url('https://z-cdn-media.chatglm.cn/files/d7d00108-b361-4af8-9065-4ef6fe41f25c.png?auth_key=1882219294-a568928791514fb88fdf60236452a12c-0-8bfa549f5967cdd8b73d78870a9db4e5')">
+                <div class="feature-card-overlay"></div>
+                <div class="feature-card-content">
+                    <div class="feature-icon-wrap">
+                        <svg width="26" height="26" fill="none" stroke="#60a5fa" stroke-width="2" stroke-linecap="round" viewBox="0 0 24 24">
+                            <line x1="4" y1="21" x2="4" y2="14"/>
+                            <line x1="4" y1="10" x2="4" y2="3"/>
+                            <line x1="12" y1="21" x2="12" y2="12"/>
+                            <line x1="12" y1="8" x2="12" y2="3"/>
+                            <line x1="20" y1="21" x2="20" y2="16"/>
+                            <line x1="20" y1="12" x2="20" y2="3"/>
+                            <line x1="1" y1="14" x2="7" y2="14"/>
+                            <line x1="9" y1="8" x2="15" y2="8"/>
+                            <line x1="17" y1="16" x2="23" y2="16"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-lg sm:text-xl font-bold mb-2">Flexible Terms</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed">Choose from 1–4 weeks repayment periods with competitive interest rates that suit you.</p>
                 </div>
-                <div class="feature-card">
-                    <div class="feature-icon">💰</div>
-                    <h3>Flexible Terms</h3>
-                    <p>Choose from 1-4 weeks repayment periods</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">📱</div>
-                    <h3>Easy Process</h3>
-                    <p>Simple online application, no paperwork</p>
+            </div>
+            <div class="feature-card-img" style="background-image:url('https://z-cdn-media.chatglm.cn/files/c6726d85-4704-4bcc-bb13-b5f48d75d674.png?auth_key=1882219294-4e5b07e0ad8844499f4850721853b67c-0-f2dca2ea8f91a4acf64f5da811f84e5c')">
+                <div class="feature-card-overlay"></div>
+                <div class="feature-card-content">
+                    <div class="feature-icon-wrap">
+                        <svg width="26" height="26" fill="none" stroke="#60a5fa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+                            <rect x="5" y="2" width="14" height="20" rx="2" ry="2"/>
+                            <line x1="12" y1="18" x2="12.01" y2="18"/>
+                            <path d="M9 10l2 2 4-4"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-lg sm:text-xl font-bold mb-2">Easy Process</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed">Simple online application — no paperwork needed. Apply from anywhere, anytime on your phone.</p>
                 </div>
             </div>
         </div>
-    </section>
-
-    <!-- Testimonials Section (continuous marquee) -->
-    <section id="testimonials" class="testimonials-section" data-reveal>
-        <div class="container">
-            <div class="section-header">
-                <h2>What Our Clients Say</h2>
-                <p>Success stories from our satisfied borrowers</p>
-            </div>
-
-            <div class="marquee">
-                <div class="marquee-track">
-                    <div class="testimonial-card">
-                        <div class="testimonial-text">"Quick approval and flexible terms. Perfect for my business needs."</div>
-                        <div class="testimonial-author">- John Banda</div>
-                    </div>
-                    <div class="testimonial-card">
-                        <div class="testimonial-text">"The best microfinance service in Blantyre. Highly recommended!"</div>
-                        <div class="testimonial-author">- Mary Chiwala</div>
-                    </div>
-                    <div class="testimonial-card">
-                        <div class="testimonial-text">"Professional service and fair rates. Helped me grow my business."</div>
-                        <div class="testimonial-author">- Paul Mthembu</div>
-                    </div>
-                    <div class="testimonial-card">
-                        <div class="testimonial-text">"mumakwana madolo, keep it up"</div>
-                        <div class="testimonial-author">- Kondwani Ngowela</div>
-                    </div>
-
-                    <!-- duplicated for smooth continuous loop -->
-                    <div class="testimonial-card">
-                        <div class="testimonial-text">"Quick approval and flexible terms. Perfect for my business needs."</div>
-                        <div class="testimonial-author">- John Banda</div>
-                    </div>
-                    <div class="testimonial-card">
-                        <div class="testimonial-text">"The best microfinance service in Blantyre. Highly recommended!"</div>
-                        <div class="testimonial-author">- Mary Chiwala</div>
-                    </div>
-                    <div class="testimonial-card">
-                        <div class="testimonial-text">"Professional service and fair rates. Helped me grow my business."</div>
-                        <div class="testimonial-author">- Paul Mthembu</div>
-                    </div>
-                    <div class="testimonial-card">
-                        <div class="testimonial-text">"mumakwana madolo, keep it up"</div>
-                        <div class="testimonial-author">- Kondwani Ngowela</div>
+        <div class="mt-14 sm:mt-16 flex justify-center reveal">
+            <div class="relative max-w-2xl w-full rounded-2xl overflow-hidden" style="height:120px">
+                <div class="absolute inset-0 bg-gradient-to-r from-navy-900 via-navy-800 to-navy-900"></div>
+                <img src="https://z-cdn-media.chatglm.cn/files/d7d00108-b361-4af8-9065-4ef6fe41f25c.png?auth_key=1882219294-a568928791514fb88fdf60236452a12c-0-8bfa549f5967cdd8b73d78870a9db4e5" alt="" class="absolute inset-0 w-full h-full object-cover opacity-15" style="object-position:center">
+                <div class="absolute inset-0 flex items-center justify-center">
+                    <div class="text-center">
+                        <div class="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-gold-400 to-gold-500 bg-clip-text text-transparent">MWK 100K — 5,000,000</div>
+                        <p class="text-slate-400 text-sm mt-2">Loan amounts for every need</p>
                     </div>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 
-    <!-- Footer -->
-    <footer class="footer" id="contact">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-brand">
-                    <h3>Renmal Capital Limited</h3>
-                    <p>Empowering Malawians with accessible microfinance solutions.</p>
+<!-- CALCULATOR SECTION -->
+<section id="calculator" class="py-20 sm:py-24 relative" style="background:linear-gradient(180deg,#060b18 0%,#0d1425 50%,#060b18 100%)">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6">
+        <div class="text-center mb-12 sm:mb-16 reveal">
+            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-brand-600/10 border border-brand-600/20 text-brand-400 text-xs font-semibold uppercase tracking-wider mb-4">Calculator</div>
+            <h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold mb-4">Calculate Your Loan</h2>
+            <p class="text-slate-400 max-w-xl mx-auto text-sm sm:text-base">Estimate your repayment amount easily</p>
+        </div>
+        <div class="calc-grid grid lg:grid-cols-5 gap-6 sm:gap-8 reveal" style="grid-template-columns:3fr 2fr">
+            <div class="glass-card p-5 sm:p-8">
+                <div class="mb-6 sm:mb-8">
+                    <label class="text-sm font-medium text-slate-300 mb-3 block">Loan Amount (MWK)</label>
+                    <div class="flex flex-wrap gap-2 mb-3">
+                        <button type="button" class="amount-btn" data-amount="100000">100K</button>
+                        <button type="button" class="amount-btn" data-amount="500000">500K</button>
+                        <button type="button" class="amount-btn active" data-amount="1000000">1M</button>
+                        <button type="button" class="amount-btn" data-amount="2000000">2M</button>
+                        <button type="button" class="amount-btn" data-amount="5000000">5M</button>
+                    </div>
+                    <div class="flex gap-2 mb-4">
+                        <input type="number" id="customAmount" class="custom-input-box" placeholder="Or enter custom amount (e.g. 750000)" min="100000" max="5000000" step="10000">
+                        <button type="button" onclick="setCustomAmount()" class="btn-primary" style="padding:10px 20px;font-size:13px;white-space:nowrap">Set</button>
+                    </div>
+                    <input type="range" id="loanAmount" class="calc-range mb-2" min="100000" max="5000000" step="100000" value="1000000">
+                    <div class="flex justify-between text-xs text-slate-500"><span>100K</span><span id="amountDisplay" class="text-brand-400 font-semibold text-sm">MWK 1,000,000</span><span>5M</span></div>
                 </div>
-                <div class="footer-contact">
-                    <h4>Get In Touch</h4>
-                    <div class="footer-contact-items">
-                        <div class="footer-contact-item">
-                            <span class="icon">📞</span>
-                            <div>
-                                <div class="label">Phone</div>
-                                <div class="value">0883 96 85 86 | 0883 40 51 37<br>0988 77 83 03 | 0995 53 31 46</div>
-                            </div>
+                <div class="mb-6 sm:mb-8">
+                    <label class="text-sm font-medium text-slate-300 mb-3 block">Loan Term</label>
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        <button type="button" class="term-btn" data-weeks="1" data-rate="20">1 Wk<br><small class="text-xs opacity-60">20%</small></button>
+                        <button type="button" class="term-btn" data-weeks="2" data-rate="30">2 Wks<br><small class="text-xs opacity-60">30%</small></button>
+                        <button type="button" class="term-btn active" data-weeks="3" data-rate="40">3 Wks<br><small class="text-xs opacity-60">40%</small></button>
+                        <button type="button" class="term-btn" data-weeks="4" data-rate="50">4 Wks<br><small class="text-xs opacity-60">50%</small></button>
+                    </div>
+                    <input type="range" id="loanTerm" class="calc-range mb-2" min="1" max="4" step="1" value="3">
+                    <div class="flex justify-between text-xs text-slate-500"><span>1 Week</span><span id="termDisplay" class="text-brand-400 font-semibold text-sm">3 Weeks — 40%</span><span>4 Weeks</span></div>
+                </div>
+                <div>
+                    <label class="text-sm font-medium text-slate-300 mb-2 block">Interest Rate</label>
+                    <div class="form-input text-center text-brand-400 font-bold text-lg" id="rateDisplay" style="cursor:default">40%</div>
+                </div>
+            </div>
+            <div class="result-box flex flex-col justify-center">
+                <div class="text-sm text-slate-400 mb-2">Total Repayment</div>
+                <div class="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white mb-6" id="totalRepayment">MWK 1,400,000</div>
+                <div class="space-y-3 mb-8">
+                    <div class="flex justify-between text-sm"><span class="text-slate-400">Principal</span><span id="principalDisplay" class="text-slate-200 font-medium">MWK 1,000,000</span></div>
+                    <div class="flex justify-between text-sm"><span class="text-slate-400">Interest</span><span id="interestDisplay" class="text-gold-400 font-medium">MWK 400,000</span></div>
+                    <div class="border-t border-slate-700/50 pt-3 flex justify-between text-sm"><span class="text-slate-400">Duration</span><span id="durationDisplay" class="text-slate-200 font-medium">3 Weeks</span></div>
+                </div>
+                <div class="flex flex-col gap-3">
+                    <a href="#apply" class="btn-primary justify-center text-sm" onclick="switchTab('personal')">
+                        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+                        Apply Personal
+                    </a>
+                    <a href="#apply" class="btn-secondary justify-center text-sm" onclick="switchTab('business')">
+                        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 7H4a2 2 0 00-2 2v10a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2z"/></svg>
+                        Apply Business
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section id="testimonials" class="py-20 sm:py-24 overflow-hidden">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 mb-10 sm:mb-12 reveal">
+        <div class="text-center">
+            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-brand-600/10 border border-brand-600/20 text-brand-400 text-xs font-semibold uppercase tracking-wider mb-4">Testimonials</div>
+            <h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold mb-4">What Our Clients Say</h2>
+            <p class="text-slate-400 max-w-xl mx-auto text-sm sm:text-base">Success stories from our satisfied borrowers</p>
+        </div>
+    </div>
+    <div class="marquee-container reveal">
+        <div class="marquee-track">
+            <div class="testimonial-card"><p class="text-slate-300 text-sm leading-relaxed mb-4">"Quick approval and flexible terms. Perfect for my business needs. I got my funds the very next day!"</p><div class="text-brand-400 text-sm font-semibold">— John Banda</div></div>
+            <div class="testimonial-card"><p class="text-slate-300 text-sm leading-relaxed mb-4">"The best microfinance service in Blantyre. Highly recommended for anyone looking for fast loans."</p><div class="text-brand-400 text-sm font-semibold">— Mary Chiwala</div></div>
+            <div class="testimonial-card"><p class="text-slate-300 text-sm leading-relaxed mb-4">"Professional service and fair rates. Helped me grow my business from a small shop to a thriving enterprise."</p><div class="text-brand-400 text-sm font-semibold">— Paul Mthembu</div></div>
+            <div class="testimonial-card"><p class="text-slate-300 text-sm leading-relaxed mb-4">"Mumakwana madolo, keep it up! The process was so easy and the team was very helpful."</p><div class="text-brand-400 text-sm font-semibold">— Kondwani Ngowela</div></div>
+            <div class="testimonial-card"><p class="text-slate-300 text-sm leading-relaxed mb-4">"I was amazed at how fast everything was. From application to disbursement, everything was smooth."</p><div class="text-brand-400 text-sm font-semibold">— Chimwemwe Banda</div></div>
+            <div class="testimonial-card"><p class="text-slate-300 text-sm leading-relaxed mb-4">"Renmal Capital came through when I needed it most. Their collateral process is straightforward."</p><div class="text-brand-400 text-sm font-semibold">— Grace Phiri</div></div>
+            <div class="testimonial-card"><p class="text-slate-300 text-sm leading-relaxed mb-4">"Quick approval and flexible terms. Perfect for my business needs. I got my funds the very next day!"</p><div class="text-brand-400 text-sm font-semibold">— John Banda</div></div>
+            <div class="testimonial-card"><p class="text-slate-300 text-sm leading-relaxed mb-4">"The best microfinance service in Blantyre. Highly recommended for anyone looking for fast loans."</p><div class="text-brand-400 text-sm font-semibold">— Mary Chiwala</div></div>
+            <div class="testimonial-card"><p class="text-slate-300 text-sm leading-relaxed mb-4">"Professional service and fair rates. Helped me grow my business from a small shop to a thriving enterprise."</p><div class="text-brand-400 text-sm font-semibold">— Paul Mthembu</div></div>
+            <div class="testimonial-card"><p class="text-slate-300 text-sm leading-relaxed mb-4">"Mumakwana madolo, keep it up! The process was so easy and the team was very helpful."</p><div class="text-brand-400 text-sm font-semibold">— Kondwani Ngowela</div></div>
+            <div class="testimonial-card"><p class="text-slate-300 text-sm leading-relaxed mb-4">"I was amazed at how fast everything was. From application to disbursement, everything was smooth."</p><div class="text-brand-400 text-sm font-semibold">— Chimwemwe Banda</div></div>
+            <div class="testimonial-card"><p class="text-slate-300 text-sm leading-relaxed mb-4">"Renmal Capital came through when I needed it most. Their collateral process is straightforward."</p><div class="text-brand-400 text-sm font-semibold">— Grace Phiri</div></div>
+        </div>
+    </div>
+</section>
+
+<!-- LOAN APPLICATION SECTION -->
+<section id="apply" class="py-20 sm:py-24 relative" style="background:linear-gradient(180deg,#060b18 0%,#0d1425 50%,#060b18 100%)">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6">
+        <div class="text-center mb-8 sm:mb-10 reveal">
+            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-brand-600/10 border border-brand-600/20 text-brand-400 text-xs font-semibold uppercase tracking-wider mb-4">Apply Now</div>
+            <h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold mb-4">Loan Application</h2>
+            <p class="text-slate-400 max-w-xl mx-auto text-sm sm:text-base">Choose your loan type and fill in the application form below</p>
+        </div>
+        <div class="flex justify-center gap-2 sm:gap-3 mb-8 sm:mb-10 reveal">
+            <button type="button" class="tab-btn active" data-tab="personal" onclick="switchTab('personal')">
+                <span class="flex items-center gap-2">
+                    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+                    Personal Loan
+                </span>
+            </button>
+            <button type="button" class="tab-btn" data-tab="business" onclick="switchTab('business')">
+                <span class="flex items-center gap-2">
+                    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 7H4a2 2 0 00-2 2v10a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2z"/></svg>
+                    Business Loan
+                </span>
+            </button>
+        </div>
+
+        <!-- PERSONAL LOAN FORM -->
+        <div id="panel-personal" class="form-panel active reveal">
+            <div class="glass-card p-4 sm:p-6 lg:p-10">
+                <div class="mb-6 sm:mb-8">
+                    <h3 class="text-lg sm:text-xl font-bold mb-2">Personal Loan Application</h3>
+                    <p class="text-slate-400 text-sm">Fill in your details below. Collateral is required for all loans.</p>
+                </div>
+                <form id="personalLoanForm" action="https://formspree.io/f/xrevqvpy" method="POST" enctype="multipart/form-data">
+                    <input type="hidden" name="loanType" value="Personal Loan">
+                    <div class="form-section-title">Personal Information</div>
+                    <div class="form-row grid grid-cols-2 gap-3 sm:gap-4 mb-5 sm:mb-6">
+                        <div class="form-group"><label>Full Name *</label><input type="text" name="fullName" required class="form-input" placeholder="John Doe"></div>
+                        <div class="form-group"><label>Phone Number *</label><input type="tel" name="phone" required class="form-input" placeholder="+265 XXX XXX XXX"></div>
+                    </div>
+                    <div class="form-row grid grid-cols-2 gap-3 sm:gap-4 mb-5 sm:mb-6">
+                        <div class="form-group"><label>Email Address</label><input type="email" name="email" class="form-input" placeholder="john@example.com"></div>
+                        <div class="form-group"><label>National ID *</label><input type="text" name="nationalId" required class="form-input" placeholder="National ID Number"></div>
+                    </div>
+                    <div class="form-group mb-6 sm:mb-8"><label>Residential Address *</label><textarea name="address" required class="form-input" rows="2" placeholder="Your physical address"></textarea></div>
+                    <div class="form-section-title">Employment Details</div>
+                    <div class="form-row grid grid-cols-2 gap-3 sm:gap-4 mb-5 sm:mb-6">
+                        <div class="form-group"><label>Occupation *</label><input type="text" name="occupation" required class="form-input" placeholder="Your job/business"></div>
+                        <div class="form-group"><label>Employer</label><input type="text" name="employer" class="form-input" placeholder="Company name"></div>
+                    </div>
+                    <div class="form-group mb-6 sm:mb-8"><label>Monthly Income (MWK) *</label><input type="number" name="monthlyIncome" required class="form-input" placeholder="500000"></div>
+                    <div class="form-section-title">Loan Details</div>
+                    <div class="form-row grid grid-cols-2 gap-3 sm:gap-4 mb-5 sm:mb-6">
+                        <div class="form-group"><label>Loan Amount (MWK) *</label><input type="number" name="loanAmount" required class="form-input" placeholder="1000000" min="100000" max="5000000"></div>
+                        <div class="form-group">
+                            <label>Repayment Period *</label>
+                            <select name="repaymentPeriod" required class="form-input">
+                                <option value="">Select period</option>
+                                <option value="1">1 Week (20% interest)</option>
+                                <option value="2">2 Weeks (30% interest)</option>
+                                <option value="3">3 Weeks (40% interest)</option>
+                                <option value="4">4 Weeks (50% interest)</option>
+                            </select>
                         </div>
-                        <div class="footer-contact-item">
-                            <span class="icon">📍</span>
-                            <div>
-                                <div class="label">Location</div>
-                                <div class="value">Blantyre, Malawi</div>
-                            </div>
+                    </div>
+                    <div class="form-group mb-6 sm:mb-8">
+                        <label>Purpose of Loan *</label>
+                        <select name="loanPurpose" required class="form-input">
+                            <option value="">Select purpose</option>
+                            <option value="education">Education</option>
+                            <option value="medical">Medical Expenses</option>
+                            <option value="home">Home Improvement</option>
+                            <option value="emergency">Emergency</option>
+                            <option value="business">Small Business</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-section-title">Collateral Information</div>
+                    <div class="alert-box"><strong>⚠️ Important:</strong> Collateral is mandatory for all loans. Please provide details of your collateral.</div>
+                    <div class="form-group mb-4"><label>Collateral Description *</label><textarea name="collateral" required class="form-input" rows="2" placeholder="Describe your collateral (e.g., land, vehicle, electronics)"></textarea></div>
+                    <div class="form-group mb-4"><label>Estimated Collateral Value (MWK) *</label><input type="number" name="collateralValue" required class="form-input" placeholder="2000000"></div>
+                    <div class="form-group mb-6 sm:mb-8"><label>Collateral Photo(s)</label><input type="file" name="collateralPhoto" accept="image/*" multiple class="form-input" style="padding:10px"><small class="text-slate-500 text-xs">Upload photos of the collateral for verification.</small></div>
+                    <div class="form-section-title">Document Uploads</div>
+                    <div class="upload-grid grid grid-cols-2 sm:grid-cols-3 gap-3 mb-6 sm:mb-8">
+                        <label class="upload-card"><span class="text-sm font-medium text-slate-200">Applicant photo</span><small class="text-xs text-slate-500">Clear passport-style photo</small><input type="file" name="applicantPhoto" accept="image/*" capture="environment"></label>
+                        <label class="upload-card"><span class="text-sm font-medium text-slate-200">National ID (front)</span><small class="text-xs text-slate-500">Front side of ID</small><input type="file" name="nationalIdFront" accept="image/*" capture="environment"></label>
+                        <label class="upload-card"><span class="text-sm font-medium text-slate-200">National ID (back)</span><small class="text-xs text-slate-500">Back side of ID</small><input type="file" name="nationalIdBack" accept="image/*" capture="environment"></label>
+                        <label class="upload-card"><span class="text-sm font-medium text-slate-200">Utility bill / payslip</span><small class="text-xs text-slate-500">Water, electricity or payslip</small><input type="file" name="utilityBill" accept="image/*" capture="environment"></label>
+                    </div>
+                    <div class="form-section-title">Guarantor Information</div>
+                    <div class="form-row grid grid-cols-2 gap-3 sm:gap-4 mb-4">
+                        <div class="form-group"><label>Guarantor Name *</label><input type="text" name="guarantorName" required class="form-input" placeholder="Full name"></div>
+                        <div class="form-group"><label>Guarantor Phone *</label><input type="tel" name="guarantorPhone" required class="form-input" placeholder="+265 XXX XXX XXX"></div>
+                    </div>
+                    <div class="form-group mb-6 sm:mb-8"><label>Relationship to Guarantor *</label><input type="text" name="guarantorRelationship" required class="form-input" placeholder="e.g., Friend, Family member"></div>
+                    <button type="submit" class="btn-submit" id="personalSubmitBtn">Submit Personal Application</button>
+                    <p class="text-center text-xs text-slate-500 mt-4">By submitting, you agree to our terms and conditions. We will contact you within 24 hours.</p>
+                </form>
+            </div>
+        </div>
+
+        <!-- BUSINESS LOAN FORM -->
+        <div id="panel-business" class="form-panel reveal">
+            <div class="glass-card p-4 sm:p-6 lg:p-10">
+                <div class="mb-6 sm:mb-8">
+                    <h3 class="text-lg sm:text-xl font-bold mb-2">Business Loan Application</h3>
+                    <p class="text-slate-400 text-sm">Grow your business with our flexible financing options. Collateral required.</p>
+                </div>
+                <form id="businessLoanForm" action="https://formspree.io/f/xrevqvpy" method="POST" enctype="multipart/form-data">
+                    <input type="hidden" name="loanType" value="Business Loan">
+                    <div class="form-section-title">Business Information</div>
+                    <div class="form-row grid grid-cols-2 gap-3 sm:gap-4 mb-4">
+                        <div class="form-group"><label>Business Name *</label><input type="text" name="businessName" required class="form-input" placeholder="Your business name"></div>
+                        <div class="form-group">
+                            <label>Business Type *</label>
+                            <select name="businessType" required class="form-input">
+                                <option value="">Select type</option>
+                                <option value="retail">Retail/Shop</option>
+                                <option value="agriculture">Agriculture</option>
+                                <option value="manufacturing">Manufacturing</option>
+                                <option value="services">Services</option>
+                                <option value="trading">Trading</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row grid grid-cols-2 gap-3 sm:gap-4 mb-4">
+                        <div class="form-group"><label>Years in Operation *</label><input type="number" name="yearsInBusiness" required class="form-input" placeholder="2" min="0"></div>
+                        <div class="form-group"><label>Number of Employees</label><input type="number" name="employees" class="form-input" placeholder="5"></div>
+                    </div>
+                    <div class="form-group mb-6 sm:mb-8"><label>Business Address *</label><textarea name="businessAddress" required class="form-input" rows="2" placeholder="Physical business location"></textarea></div>
+                    <div class="form-section-title">Owner Information</div>
+                    <div class="form-row grid grid-cols-2 gap-3 sm:gap-4 mb-4">
+                        <div class="form-group"><label>Full Name *</label><input type="text" name="ownerName" required class="form-input" placeholder="John Doe"></div>
+                        <div class="form-group"><label>Phone Number *</label><input type="tel" name="phone" required class="form-input" placeholder="+265 XXX XXX XXX"></div>
+                    </div>
+                    <div class="form-row grid grid-cols-2 gap-3 sm:gap-4 mb-6 sm:mb-8">
+                        <div class="form-group"><label>Email Address</label><input type="email" name="email" class="form-input" placeholder="john@example.com"></div>
+                        <div class="form-group"><label>National ID *</label><input type="text" name="nationalId" required class="form-input" placeholder="National ID Number"></div>
+                    </div>
+                    <div class="form-section-title">Financial Information</div>
+                    <div class="form-row grid grid-cols-2 gap-3 sm:gap-4 mb-6 sm:mb-8">
+                        <div class="form-group"><label>Monthly Revenue (MWK) *</label><input type="number" name="monthlyRevenue" required class="form-input" placeholder="2000000"></div>
+                        <div class="form-group"><label>Monthly Expenses (MWK) *</label><input type="number" name="monthlyExpenses" required class="form-input" placeholder="1500000"></div>
+                    </div>
+                    <div class="form-section-title">Loan Details</div>
+                    <div class="form-row grid grid-cols-2 gap-3 sm:gap-4 mb-4">
+                        <div class="form-group"><label>Loan Amount (MWK) *</label><input type="number" name="loanAmount" required class="form-input" placeholder="2000000" min="100000" max="5000000"></div>
+                        <div class="form-group">
+                            <label>Repayment Period *</label>
+                            <select name="repaymentPeriod" required class="form-input">
+                                <option value="">Select period</option>
+                                <option value="1">1 Week (20% interest)</option>
+                                <option value="2">2 Weeks (30% interest)</option>
+                                <option value="3">3 Weeks (40% interest)</option>
+                                <option value="4">4 Weeks (50% interest)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group mb-6 sm:mb-8"><label>Purpose of Loan *</label><textarea name="loanPurpose" required class="form-input" rows="2" placeholder="Explain how you will use the loan"></textarea></div>
+                    <div class="form-section-title">Collateral Information</div>
+                    <div class="alert-box"><strong>⚠️ Important:</strong> Business loans require substantial collateral. Please provide detailed information.</div>
+                    <div class="form-group mb-4"><label>Collateral Description *</label><textarea name="collateral" required class="form-input" rows="2" placeholder="Describe your collateral (e.g., equipment, property, vehicles)"></textarea></div>
+                    <div class="form-group mb-4"><label>Estimated Collateral Value (MWK) *</label><input type="number" name="collateralValue" required class="form-input" placeholder="3000000"></div>
+                    <div class="form-group mb-6 sm:mb-8"><label>Collateral Documents</label><input type="file" name="collateralDocs" multiple accept=".pdf,.jpg,.png" class="form-input" style="padding:10px"><small class="text-slate-500 text-xs">Upload proof of ownership (titles, receipts, etc.)</small></div>
+                    <div class="form-section-title">Document Uploads</div>
+                    <div class="upload-grid grid grid-cols-2 sm:grid-cols-3 gap-3 mb-6 sm:mb-8">
+                        <label class="upload-card"><span class="text-sm font-medium text-slate-200">Owner photo</span><small class="text-xs text-slate-500">Clear photo of owner</small><input type="file" name="ownerPhoto" accept="image/*" capture="environment"></label>
+                        <label class="upload-card"><span class="text-sm font-medium text-slate-200">National ID (front)</span><small class="text-xs text-slate-500">Front side of ID</small><input type="file" name="nationalIdFront" accept="image/*" capture="environment"></label>
+                        <label class="upload-card"><span class="text-sm font-medium text-slate-200">National ID (back)</span><small class="text-xs text-slate-500">Back side of ID</small><input type="file" name="nationalIdBack" accept="image/*" capture="environment"></label>
+                        <label class="upload-card"><span class="text-sm font-medium text-slate-200">Business licence</span><small class="text-xs text-slate-500">Licence or registration</small><input type="file" name="businessLicence" accept="image/*,.pdf"></label>
+                        <label class="upload-card"><span class="text-sm font-medium text-slate-200">Collateral photo(s)</span><small class="text-xs text-slate-500">Collateral images</small><input type="file" name="collateralPhoto" accept="image/*" multiple></label>
+                    </div>
+                    <div class="form-section-title">Guarantor Information</div>
+                    <div class="form-row grid grid-cols-2 gap-3 sm:gap-4 mb-4">
+                        <div class="form-group"><label>Guarantor Name *</label><input type="text" name="guarantorName" required class="form-input" placeholder="Full name"></div>
+                        <div class="form-group"><label>Guarantor Phone *</label><input type="tel" name="guarantorPhone" required class="form-input" placeholder="+265 XXX XXX XXX"></div>
+                    </div>
+                    <div class="form-row grid grid-cols-2 gap-3 sm:gap-4 mb-6 sm:mb-8">
+                        <div class="form-group"><label>Guarantor Occupation</label><input type="text" name="guarantorOccupation" class="form-input" placeholder="Job/Business"></div>
+                        <div class="form-group"><label>Relationship *</label><input type="text" name="guarantorRelationship" required class="form-input" placeholder="e.g., Business partner, Family"></div>
+                    </div>
+                    <button type="submit" class="btn-submit" id="businessSubmitBtn">Submit Business Application</button>
+                    <p class="text-center text-xs text-slate-500 mt-4">By submitting, you agree to our terms and conditions. We will review your application within 24 hours.</p>
+                </form>
+            </div>
+        </div>
+
+        <div class="mt-8 sm:mt-10 flex justify-center reveal">
+            <div class="relative w-full max-w-lg rounded-2xl overflow-hidden" style="height:110px">
+                <div class="absolute inset-0 bg-gradient-to-r from-navy-900 via-navy-800 to-navy-900"></div>
+                <img src="https://z-cdn-media.chatglm.cn/files/c6726d85-4704-4bcc-bb13-b5f48d75d674.png?auth_key=1882219294-4e5b07e0ad8844499f4850721853b67c-0-f2dca2ea8f91a4acf64f5da811f84e5c" alt="" class="absolute inset-0 w-full h-full object-cover opacity-15">
+                <div class="absolute inset-0 flex items-center justify-center">
+                    <div class="flex items-center gap-3">
+                        <svg width="24" height="24" fill="none" stroke="#10b981" stroke-width="2" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                        <span class="text-emerald-400 font-semibold text-xs sm:text-sm">Trusted by hundreds of Malawian businesses</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer id="contact" class="py-12 sm:py-16 border-t border-slate-800/50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6">
+        <div class="footer-grid grid gap-8 sm:gap-12 mb-10 sm:mb-12" style="grid-template-columns:1.5fr 1.5fr 1fr">
+            <div>
+                <div class="flex items-center gap-3 mb-4">
+                    <img src="assets/images/renmal-logo.png" alt="Renmal Capital" class="h-8 sm:h-9 w-auto rounded-lg">
+                    <span class="text-base sm:text-lg font-bold text-white">Renmal Capital Limited</span>
+                </div>
+                <p class="text-slate-400 text-sm leading-relaxed mb-4">Empowering Malawians with accessible microfinance solutions. Fast, fair, and reliable.</p>
+                <div class="inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-amber-500/10 border border-amber-500/20 text-amber-400 text-xs font-medium">
+                    ⚠️ Collateral is a MUST for all loans
+                </div>
+            </div>
+            <div>
+                <h4 class="text-sm font-semibold text-white uppercase tracking-wider mb-4">Get In Touch</h4>
+                <div class="space-y-4">
+                    <div class="flex gap-3">
+                        <span class="text-lg">📞</span>
+                        <div>
+                            <div class="text-xs text-slate-500 mb-1">Phone</div>
+                            <div class="text-sm text-slate-300 leading-relaxed">0883 96 85 86 · 0883 40 51 37<br>0988 77 83 03 · 0995 53 31 46</div>
+                        </div>
+                    </div>
+                    <div class="flex gap-3">
+                        <span class="text-lg">📍</span>
+                        <div>
+                            <div class="text-xs text-slate-500 mb-1">Location</div>
+                            <div class="text-sm text-slate-300">Blantyre, Malawi</div>
                         </div>
                     </div>
                 </div>
-                <div class="footer-notice">
-                    <p><strong>Important:</strong> Collateral is a MUST for all loans</p>
+            </div>
+            <div>
+                <h4 class="text-sm font-semibold text-white uppercase tracking-wider mb-4">Quick Links</h4>
+                <div class="space-y-2">
+                    <a href="#hero" class="block text-sm text-slate-400 hover:text-brand-400 transition-colors no-underline">Home</a>
+                    <a href="#features" class="block text-sm text-slate-400 hover:text-brand-400 transition-colors no-underline">Features</a>
+                    <a href="#calculator" class="block text-sm text-slate-400 hover:text-brand-400 transition-colors no-underline">Calculator</a>
+                    <a href="#apply" class="block text-sm text-slate-400 hover:text-brand-400 transition-colors no-underline">Apply Now</a>
                 </div>
             </div>
-            <div class="footer-bottom">
-                <p>&copy; 2026 Renmal Capital Limited. All rights reserved.</p>
-                <p>Website developed by <a href="https://www.afrisoft.online" target="_blank" rel="noopener noreferrer">www.afrisoft.online</a></p>
-            </div>
         </div>
-    </footer>
+        <div class="border-t border-slate-800/50 pt-6 flex flex-col sm:flex-row justify-between items-center gap-3">
+            <p class="text-xs text-slate-500">&copy; 2026 Renmal Capital Limited. All rights reserved.</p>
+            <p class="text-xs text-slate-500">Website developed by <a href="https://www.afrisoft.online" target="_blank" rel="noopener noreferrer" class="text-brand-400 hover:underline">www.afrisoft.online</a></p>
+        </div>
+    </div>
+</footer>
 
-    <script src="script.js"></script>
+<script src="supabase-config.js"></script>
+
+<script>
+const canvas = document.getElementById('particleCanvas');
+const ctx = canvas.getContext('2d');
+let particles = [];
+let mouse = { x: -1000, y: -1000, vx: 0, vy: 0, prevX: -1000, prevY: -1000 };
+const PARTICLE_COUNT = 80;
+const CONNECTION_DIST = 100;
+const MOUSE_RADIUS = 160;
+
+function resizeCanvas() {
+    const dpr = window.devicePixelRatio || 1;
+    const rect = canvas.parentElement.getBoundingClientRect();
+    canvas.width = rect.width * dpr;
+    canvas.height = rect.height * dpr;
+    canvas.style.width = rect.width + 'px';
+    canvas.style.height = rect.height + 'px';
+    ctx.scale(dpr, dpr);
+}
+
+class Particle {
+    constructor(w, h) {
+        this.x = Math.random() * w;
+        this.y = Math.random() * h;
+        this.size = Math.random() * 2.2 + 0.6;
+        this.baseSpeedX = (Math.random() - 0.5) * 0.35;
+        this.baseSpeedY = (Math.random() - 0.5) * 0.35;
+        this.vx = this.baseSpeedX;
+        this.vy = this.baseSpeedY;
+        this.opacity = Math.random() * 0.6 + 0.2;
+        this.twinkleSpeed = Math.random() * 0.02 + 0.005;
+        this.twinklePhase = Math.random() * Math.PI * 2;
+        this.hue = Math.random() > 0.7 ? 45 : 220;
+    }
+    update(w, h) {
+        this.twinklePhase += this.twinkleSpeed;
+        const twinkle = (Math.sin(this.twinklePhase) + 1) / 2;
+        this.currentOpacity = this.opacity * (0.5 + twinkle * 0.5);
+        const dx = this.x - mouse.x;
+        const dy = this.y - mouse.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < MOUSE_RADIUS && dist > 0) {
+            const force = (MOUSE_RADIUS - dist) / MOUSE_RADIUS;
+            this.vx += mouse.vx * force * 0.3 + (dx / dist) * force * 2;
+            this.vy += mouse.vy * force * 0.3 + (dy / dist) * force * 2;
+        }
+        this.vx += (this.baseSpeedX - this.vx) * 0.02;
+        this.vy += (this.baseSpeedY - this.vy) * 0.02;
+        this.x += this.vx;
+        this.y += this.vy;
+        if (this.x < -10) this.x = w + 10;
+        if (this.x > w + 10) this.x = -10;
+        if (this.y < -10) this.y = h + 10;
+        if (this.y > h + 10) this.y = -10;
+    }
+    draw(ctx) {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fillStyle = this.hue === 45
+            ? `rgba(251,191,36,${this.currentOpacity})`
+            : `rgba(96,165,250,${this.currentOpacity})`;
+        ctx.fill();
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size * 3, 0, Math.PI * 2);
+        ctx.fillStyle = this.hue === 45
+            ? `rgba(251,191,36,${this.currentOpacity * 0.1})`
+            : `rgba(96,165,250,${this.currentOpacity * 0.1})`;
+        ctx.fill();
+    }
+}
+
+function initParticles() {
+    const rect = canvas.parentElement.getBoundingClientRect();
+    particles = [];
+    for (let i = 0; i < PARTICLE_COUNT; i++) particles.push(new Particle(rect.width, rect.height));
+}
+
+function drawConnections() {
+    for (let i = 0; i < particles.length; i++) {
+        for (let j = i + 1; j < particles.length; j++) {
+            const dx = particles[i].x - particles[j].x;
+            const dy = particles[i].y - particles[j].y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            if (dist < CONNECTION_DIST) {
+                const opacity = (1 - dist / CONNECTION_DIST) * 0.12;
+                ctx.beginPath();
+                ctx.moveTo(particles[i].x, particles[i].y);
+                ctx.lineTo(particles[j].x, particles[j].y);
+                ctx.strokeStyle = `rgba(37,99,235,${opacity})`;
+                ctx.lineWidth = 0.5;
+                ctx.stroke();
+            }
+        }
+    }
+}
+
+function animate() {
+    const rect = canvas.parentElement.getBoundingClientRect();
+    ctx.clearRect(0, 0, rect.width, rect.height);
+    mouse.vx *= 0.9;
+    mouse.vy *= 0.9;
+    particles.forEach(p => p.update(rect.width, rect.height));
+    drawConnections();
+    particles.forEach(p => p.draw(ctx));
+    requestAnimationFrame(animate);
+}
+
+const heroEl = document.getElementById('hero');
+heroEl.addEventListener('mousemove', (e) => {
+    const rect = heroEl.getBoundingClientRect();
+    mouse.prevX = mouse.x; mouse.prevY = mouse.y;
+    mouse.x = e.clientX - rect.left; mouse.y = e.clientY - rect.top;
+    mouse.vx = mouse.x - mouse.prevX; mouse.vy = mouse.y - mouse.prevY;
+});
+heroEl.addEventListener('mouseleave', () => { mouse.x = -1000; mouse.y = -1000; mouse.vx = 0; mouse.vy = 0; });
+heroEl.addEventListener('touchmove', (e) => {
+    const rect = heroEl.getBoundingClientRect();
+    const t = e.touches[0];
+    mouse.prevX = mouse.x; mouse.prevY = mouse.y;
+    mouse.x = t.clientX - rect.left; mouse.y = t.clientY - rect.top;
+    mouse.vx = mouse.x - mouse.prevX; mouse.vy = mouse.y - mouse.prevY;
+}, { passive: true });
+heroEl.addEventListener('touchend', () => { mouse.x = -1000; mouse.y = -1000; mouse.vx = 0; mouse.vy = 0; });
+
+window.addEventListener('resize', () => { resizeCanvas(); initParticles(); });
+resizeCanvas(); initParticles(); animate();
+
+function toggleMobile() {
+    document.getElementById('mobileMenu').classList.toggle('open');
+    document.getElementById('hamburger').classList.toggle('open');
+}
+function closeMobile() {
+    document.getElementById('mobileMenu').classList.remove('open');
+    document.getElementById('hamburger').classList.remove('open');
+}
+
+const sections = document.querySelectorAll('section[id]');
+const navLinks = document.querySelectorAll('.nav-link');
+window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(s => { if (scrollY >= s.offsetTop - 120) current = s.getAttribute('id'); });
+    navLinks.forEach(l => {
+        l.classList.remove('active');
+        if (l.getAttribute('href')?.replace('#', '') === current) l.classList.add('active');
+    });
+});
+
+const amountSlider = document.getElementById('loanAmount');
+const termSlider = document.getElementById('loanTerm');
+const amountDisplay = document.getElementById('amountDisplay');
+const termDisplay = document.getElementById('termDisplay');
+const rateDisplay = document.getElementById('rateDisplay');
+const totalRepaymentEl = document.getElementById('totalRepayment');
+const principalDisplay = document.getElementById('principalDisplay');
+const interestDisplay = document.getElementById('interestDisplay');
+const durationDisplay = document.getElementById('durationDisplay');
+const customAmountInput = document.getElementById('customAmount');
+
+const rateMap = { 1: 20, 2: 30, 3: 40, 4: 50 };
+const termLabels = { 1: '1 Week', 2: '2 Weeks', 3: '3 Weeks', 4: '4 Weeks' };
+
+function formatMWK(n) { return 'MWK ' + n.toLocaleString('en-MW'); }
+
+function updateCalculator() {
+    const amount = parseInt(amountSlider.value);
+    const weeks = parseInt(termSlider.value);
+    const rate = rateMap[weeks];
+    amountDisplay.textContent = formatMWK(amount);
+    termDisplay.textContent = `${termLabels[weeks]} — ${rate}%`;
+    rateDisplay.textContent = `${rate}%`;
+    const interest = amount * (rate / 100);
+    const total = amount + interest;
+    totalRepaymentEl.textContent = formatMWK(total);
+    principalDisplay.textContent = formatMWK(amount);
+    interestDisplay.textContent = formatMWK(interest);
+    durationDisplay.textContent = termLabels[weeks];
+    document.querySelectorAll('.amount-btn').forEach(b => {
+        b.classList.toggle('active', parseInt(b.dataset.amount) === amount);
+    });
+    document.querySelectorAll('.term-btn').forEach(b => {
+        b.classList.toggle('active', parseInt(b.dataset.weeks) === weeks);
+    });
+}
+
+function setCustomAmount() {
+    let val = parseInt(customAmountInput.value);
+    if (!val || val < 100000) { val = 100000; }
+    if (val > 5000000) { val = 5000000; }
+    customAmountInput.value = val;
+    amountSlider.value = val;
+    updateCalculator();
+}
+
+customAmountInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') { e.preventDefault(); setCustomAmount(); }
+});
+
+amountSlider.addEventListener('input', () => {
+    customAmountInput.value = '';
+    updateCalculator();
+});
+termSlider.addEventListener('input', updateCalculator);
+
+document.querySelectorAll('.amount-btn').forEach(b => {
+    b.addEventListener('click', () => {
+        customAmountInput.value = '';
+        amountSlider.value = b.dataset.amount;
+        updateCalculator();
+    });
+});
+document.querySelectorAll('.term-btn').forEach(b => {
+    b.addEventListener('click', () => {
+        termSlider.value = b.dataset.weeks;
+        updateCalculator();
+    });
+});
+
+updateCalculator();
+
+function switchTab(tab) {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
+    document.querySelectorAll('.form-panel').forEach(p => p.classList.remove('active'));
+    document.getElementById(`panel-${tab}`).classList.add('active');
+}
+
+function setupFormSubmit(formId, btnId) {
+    const form = document.getElementById(formId);
+    const btn = document.getElementById(btnId);
+    if (!form || !btn) return;
+    const originalText = btn.textContent;
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        if (!form.checkValidity()) { form.reportValidity(); return; }
+        btn.disabled = true;
+        btn.textContent = 'Submitting...';
+        const formData = new FormData(form);
+        try {
+            const response = await fetch(form.action, {
+                method: 'POST',
+                body: formData,
+                headers: { 'Accept': 'application/json' }
+            });
+            if (response.ok) {
+                showToast('Application submitted successfully! We will contact you within 24 hours.', 'success');
+                form.reset();
+            } else {
+                const data = await response.json().catch(() => ({}));
+                showToast(data.error || 'Something went wrong. Please try again.', 'error');
+            }
+        } catch (err) {
+            showToast('Network error. Please check your connection and try again.', 'error');
+        }
+        btn.disabled = false;
+        btn.textContent = originalText;
+    });
+}
+
+setupFormSubmit('personalLoanForm', 'personalSubmitBtn');
+setupFormSubmit('businessLoanForm', 'businessSubmitBtn');
+
+function showToast(message, type) {
+    const toast = document.getElementById('toast');
+    toast.textContent = message;
+    toast.className = `toast toast-${type} show`;
+    setTimeout(() => { toast.classList.remove('show'); }, 5000);
+}
+
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
+}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
 </body>
 </html>
