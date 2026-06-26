@@ -644,8 +644,8 @@
      that will be used instead. Otherwise fill in the two values:
      ============================================================ -->
 <script>
-    window.SUPABASE_PROJECT_URL = window.SUPABASE_PROJECT_URL || 'https://YOUR-PROJECT.supabase.co';
-    window.SUPABASE_ANON_KEY   = window.SUPABASE_ANON_KEY   || 'YOUR-ANON-KEY-HERE';
+    window.SUPABASE_PROJECT_URL = window.SUPABASE_PROJECT_URL || '';
+    window.SUPABASE_ANON_KEY   = window.SUPABASE_ANON_KEY   || '';
 </script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="supabase-config.js"></script>
@@ -656,7 +656,9 @@
    falls back to inline credentials above.
    ================================================================ */
 const sb = window.supabaseClient
-    || (typeof supabase === 'function' ? supabase(window.SUPABASE_PROJECT_URL, window.SUPABASE_ANON_KEY) : null);
+    || (window.supabase && typeof window.supabase.createClient === 'function' && window.SUPABASE_PROJECT_URL && window.SUPABASE_ANON_KEY
+        ? window.supabase.createClient(window.SUPABASE_PROJECT_URL, window.SUPABASE_ANON_KEY)
+        : null);
 
 /* ================================================================
    SUPABASE STORAGE BUCKET NAMES — must match your Supabase buckets.
@@ -675,6 +677,11 @@ function getBucket(fieldName) {
     if (n.includes('nationalid') || n.includes('idfront') || n.includes('idback') || n.includes('biznational')) return BUCKETS.ids;
     if (n.includes('collateral')) return BUCKETS.collateral;
     return BUCKETS.docs;
+}
+
+function getBucketCandidates(fieldName) {
+    const buckets = [getBucket(fieldName), fieldName];
+    return [...new Set(buckets.filter(Boolean))];
 }
 
 /* ================================================================
@@ -757,7 +764,7 @@ async function handleFormSubmit(form, btn) {
     if (!form.checkValidity()) { form.reportValidity(); return; }
 
     if (!sb) {
-        showToast('Storage not configured. Please set your Supabase URL and anon key in the script.', 'error');
+        showToast('Storage not configured. Please check supabase-config.js.', 'error');
         return;
     }
 
@@ -783,23 +790,42 @@ async function handleFormSubmit(form, btn) {
         for (let i = 0; i < fileEntries.length; i++) {
             btn.querySelector('.btn-text').textContent = `Uploading ${i + 1}/${fileEntries.length}...`;
             const { fieldName, file } = fileEntries[i];
-            const bucket = getBucket(fieldName);
+            const bucketCandidates = getBucketCandidates(fieldName);
             const loanType = (form.querySelector('input[name="loanType"]')?.value || 'unknown').replace(/\s+/g, '_');
             const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
             const path = `${loanType}/${fieldName}_${Date.now()}_${safeName}`;
 
             try {
-                const { error } = await sb.storage.from(bucket).upload(path, file, { cacheControl: '3600', upsert: false });
-                if (error) {
-                    console.error('Upload error:', error);
-                    showToast(`Failed to upload ${file.name}: ${error.message}`, 'error');
-                } else {
-                    const { data: urlData } = sb.storage.from(bucket).getPublicUrl(path);
+                let uploadError = null;
+                let uploadedBucket = null;
+
+                for (const bucket of bucketCandidates) {
+                    const { error } = await sb.storage.from(bucket).upload(path, file, { cacheControl: '3600', upsert: false });
+                    if (!error) {
+                        uploadedBucket = bucket;
+                        uploadError = null;
+                        break;
+                    }
+
+                    uploadError = error;
+                    const canTryNextBucket = /bucket/i.test(error.message || '') && /not found|does not exist/i.test(error.message || '');
+                    if (!canTryNextBucket) break;
+                }
+
+                if (uploadError) {
+                    console.error('Upload error:', uploadError);
+                    showToast(`Failed to upload ${file.name}: ${uploadError.message}`, 'error');
+                } else if (uploadedBucket) {
+                    const { data: urlData } = sb.storage.from(uploadedBucket).getPublicUrl(path);
                     if (fileUrls[fieldName]) {
                         fileUrls[fieldName] += ', ' + urlData.publicUrl;
                     } else {
                         fileUrls[fieldName] = urlData.publicUrl;
                     }
+                } else {
+                    const message = 'No bucket configured for this file';
+                    console.error('Upload error:', message);
+                    showToast(`Failed to upload ${file.name}: ${message}`, 'error');
                 }
             } catch (err) {
                 console.error('Upload exception:', err);
