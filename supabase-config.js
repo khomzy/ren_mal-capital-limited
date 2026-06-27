@@ -1,6 +1,6 @@
 (function () {
-    const projectUrl = 'https://inorxdoginyirqlptbgo.supabase.co';
-    const anonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imlub3J4ZG9naW55aXJxbHB0YmdvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE0NjMwNDksImV4cCI6MjA5NzAzOTA0OX0.a_zedSMJXFmmVsituRU-x4BBuEqByY2N5hLirvApnK0';
+    const projectUrl = 'https://hycgfmdyujfqfbinsuxx.supabase.co';
+    const anonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh5Y2dmbWR5dWpmcWZiaW5zdXh4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI0OTU3MDcsImV4cCI6MjA5ODA3MTcwN30.LDiuzmndSQahE861t2WPmHfTQJ8eIWAcTMNK6jlM1P8';
 
     window.SUPABASE_PROJECT_URL = projectUrl;
     window.SUPABASE_ANON_KEY = anonKey;
