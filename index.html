@@ -664,24 +664,102 @@ const sb = window.supabaseClient
    SUPABASE STORAGE BUCKET NAMES — must match your Supabase buckets.
    Make sure each bucket allows anon uploads in its RLS policy.
    ================================================================ */
+const RENMAL_COMPANY_ID = '0001';
 const BUCKETS = {
-    photos:    'photos',       // applicant photo, owner photo
-    ids:       'national-ids', // national ID front/back images
-    docs:      'documents',    // utility bills, business licences, collateral docs
-    collateral: 'collateral'   // collateral photos
+    applicantPhoto: 'applicant-photos',
+    ownerPhoto: 'owner-photos',
+    nationalId: 'national-id-documents',
+    utility: 'utility-documents',
+    collateral: 'collateral-documents',
+    businessLicence: 'business-licences',
+    loanDocs: 'loan-documents'
 };
 
 function getBucket(fieldName) {
     const n = fieldName.toLowerCase();
-    if (n.includes('photo') || n.includes('applicant') || n.includes('owner')) return BUCKETS.photos;
-    if (n.includes('nationalid') || n.includes('idfront') || n.includes('idback') || n.includes('biznational')) return BUCKETS.ids;
     if (n.includes('collateral')) return BUCKETS.collateral;
-    return BUCKETS.docs;
+    if (n.includes('ownerphoto')) return BUCKETS.ownerPhoto;
+    if (n.includes('applicantphoto')) return BUCKETS.applicantPhoto;
+    if (n.includes('nationalid') || n.includes('idfront') || n.includes('idback') || n.includes('biznational')) return BUCKETS.nationalId;
+    if (n.includes('utility') || n.includes('payslip')) return BUCKETS.utility;
+    if (n.includes('licence') || n.includes('license')) return BUCKETS.businessLicence;
+    return BUCKETS.loanDocs;
 }
 
-function getBucketCandidates(fieldName) {
-    const buckets = [getBucket(fieldName), fieldName];
-    return [...new Set(buckets.filter(Boolean))];
+function createApplicationId() {
+    if (window.crypto && typeof window.crypto.randomUUID === 'function') return window.crypto.randomUUID();
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
+        const r = Math.random() * 16 | 0;
+        const v = c === 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+    });
+}
+
+function cleanNumber(value) {
+    const number = Number(String(value || '').replace(/[^0-9.-]/g, ''));
+    return Number.isFinite(number) ? number : null;
+}
+
+function cleanInteger(value) {
+    const number = parseInt(String(value || '').replace(/[^0-9-]/g, ''), 10);
+    return Number.isFinite(number) ? number : null;
+}
+
+function collectFormFields(form) {
+    const fields = {};
+    for (const [key, value] of new FormData(form).entries()) {
+        if (!(value instanceof File)) fields[key] = value;
+    }
+    return fields;
+}
+
+function buildApplicationPayload(form, formType, applicationId, uploadedDocs) {
+    const fields = collectFormFields(form);
+    const customerName = fields.fullName || fields.ownerName || fields.businessName || 'Website applicant';
+    const amount = cleanNumber(fields.loanAmount || fields.amount);
+    const term = cleanInteger(fields.repaymentPeriod || fields.termMonths) || 1;
+    const purpose = fields.loanPurpose || fields.purpose || '';
+    const monthlyIncome = cleanNumber(fields.monthlyIncome || fields.monthlyRevenue);
+
+    return {
+        id: applicationId,
+        company_id: RENMAL_COMPANY_ID,
+        customer_name: customerName,
+        full_name: fields.fullName || fields.ownerName || customerName,
+        phone: fields.phone || fields.phoneNumber || fields.businessPhone || '',
+        email: fields.email || '',
+        national_id: fields.nationalId || '',
+        address: fields.address || fields.businessAddress || '',
+        occupation: fields.occupation || fields.businessType || '',
+        employer: fields.employer || fields.businessName || '',
+        monthly_income: monthlyIncome,
+        amount: amount,
+        loan_amount: amount,
+        term_months: term,
+        repayment_period: fields.repaymentPeriod || '',
+        status: 'Pending',
+        purpose: purpose,
+        loan_purpose: purpose,
+        collateral: fields.collateral || '',
+        collateral_value: cleanNumber(fields.collateralValue),
+        guarantor_name: fields.guarantorName || '',
+        guarantor_phone: fields.guarantorPhone || '',
+        guarantor_relationship: fields.guarantorRelationship || '',
+        guarantor_occupation: fields.guarantorOccupation || '',
+        business_name: fields.businessName || '',
+        business_type: fields.businessType || '',
+        years_in_business: cleanInteger(fields.yearsInBusiness),
+        employees: cleanInteger(fields.employees),
+        business_address: fields.businessAddress || '',
+        owner_name: fields.ownerName || fields.fullName || '',
+        monthly_revenue: cleanNumber(fields.monthlyRevenue),
+        monthly_expenses: cleanNumber(fields.monthlyExpenses),
+        form_type: formType,
+        form_data: { ...fields, source: 'renmal_website', submittedAt: new Date().toISOString() },
+        document_urls: uploadedDocs,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+    };
 }
 
 /* ================================================================
@@ -769,117 +847,96 @@ async function handleFormSubmit(form, btn) {
     }
 
     const origHTML = btn.innerHTML;
+    const applicationId = createApplicationId();
+    const formType = form.querySelector('input[name="loanType"]')?.value || 'Website Loan';
     btn.disabled = true;
     btn.classList.add('loading');
 
-    // 1. Collect all files from upload cards
     const fileEntries = [];
     document.querySelectorAll('#' + form.id + ' .upload-card').forEach(card => {
         const input = card.querySelector('input[type="file"]');
         if (!input) return;
         const fieldName = card.dataset.name || input.name;
-        Array.from(input.files).forEach(file => {
-            fileEntries.push({ fieldName, file });
+        Array.from(input.files).forEach((file, index) => {
+            fileEntries.push({ fieldName, file, index });
         });
     });
 
-    // 2. Upload files to Supabase Storage
+    const uploadedDocs = [];
     const fileUrls = {};
-    if (fileEntries.length > 0) {
-        btn.querySelector('.btn-text').textContent = `Uploading 0/${fileEntries.length}...`;
-        for (let i = 0; i < fileEntries.length; i++) {
-            btn.querySelector('.btn-text').textContent = `Uploading ${i + 1}/${fileEntries.length}...`;
-            const { fieldName, file } = fileEntries[i];
-            const bucketCandidates = getBucketCandidates(fieldName);
-            const loanType = (form.querySelector('input[name="loanType"]')?.value || 'unknown').replace(/\s+/g, '_');
-            const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
-            const path = `${loanType}/${fieldName}_${Date.now()}_${safeName}`;
 
-            try {
-                let uploadError = null;
-                let uploadedBucket = null;
+    try {
+        if (fileEntries.length > 0) {
+            btn.querySelector('.btn-text').textContent = `Uploading 0/${fileEntries.length}...`;
+            for (let i = 0; i < fileEntries.length; i++) {
+                btn.querySelector('.btn-text').textContent = `Uploading ${i + 1}/${fileEntries.length}...`;
+                const { fieldName, file, index } = fileEntries[i];
+                const bucket = getBucket(fieldName);
+                const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
+                const path = `${RENMAL_COMPANY_ID}/${formType.replace(/\s+/g, '_').toLowerCase()}/${applicationId}/${fieldName}_${index}_${safeName}`;
 
-                for (const bucket of bucketCandidates) {
-                    const { error } = await sb.storage.from(bucket).upload(path, file, { cacheControl: '3600', upsert: false });
-                    if (!error) {
-                        uploadedBucket = bucket;
-                        uploadError = null;
-                        break;
-                    }
+                const { error } = await sb.storage.from(bucket).upload(path, file, {
+                    cacheControl: '3600',
+                    upsert: false,
+                    contentType: file.type || undefined
+                });
 
-                    uploadError = error;
-                    const canTryNextBucket = /bucket/i.test(error.message || '') && /not found|does not exist/i.test(error.message || '');
-                    if (!canTryNextBucket) break;
-                }
+                if (error) throw new Error(`Failed to upload ${file.name}: ${error.message}`);
 
-                if (uploadError) {
-                    console.error('Upload error:', uploadError);
-                    showToast(`Failed to upload ${file.name}: ${uploadError.message}`, 'error');
-                } else if (uploadedBucket) {
-                    const { data: urlData } = sb.storage.from(uploadedBucket).getPublicUrl(path);
-                    if (fileUrls[fieldName]) {
-                        fileUrls[fieldName] += ', ' + urlData.publicUrl;
-                    } else {
-                        fileUrls[fieldName] = urlData.publicUrl;
-                    }
-                } else {
-                    const message = 'No bucket configured for this file';
-                    console.error('Upload error:', message);
-                    showToast(`Failed to upload ${file.name}: ${message}`, 'error');
-                }
-            } catch (err) {
-                console.error('Upload exception:', err);
-                showToast(`Upload error: ${file.name}`, 'error');
+                const { data: urlData } = sb.storage.from(bucket).getPublicUrl(path);
+                const doc = {
+                    field: fieldName,
+                    bucket,
+                    path,
+                    name: file.name,
+                    url: urlData.publicUrl,
+                    content_type: file.type || '',
+                    size: file.size
+                };
+                uploadedDocs.push(doc);
+                fileUrls[fieldName] = fileUrls[fieldName] ? `${fileUrls[fieldName]}, ${urlData.publicUrl}` : urlData.publicUrl;
             }
         }
-    }
 
-    // 3. Build text-only FormData for Formspree
-    btn.querySelector('.btn-text').textContent = 'Submitting...';
-    const textData = new FormData();
-    for (const pair of new FormData(form).entries()) {
-        if (!(pair[1] instanceof File)) {
-            textData.append(pair[0], pair[1]);
-        }
-    }
-    // Append file URLs as text fields
-    for (const [key, url] of Object.entries(fileUrls)) {
-        textData.append(key + '_url', url);
-    }
-    textData.append('filesUploadedCount', String(fileEntries.length));
-    textData.append('fileUrls', JSON.stringify(fileUrls));
+        btn.querySelector('.btn-text').textContent = 'Saving application...';
+        const applicationPayload = buildApplicationPayload(form, formType, applicationId, uploadedDocs);
+        const { error: insertError } = await sb.from('loan_applications').insert(applicationPayload);
+        if (insertError) throw new Error(`Failed to save application: ${insertError.message}`);
 
-    // 4. Submit to Formspree (text only — no files)
-    try {
+        btn.querySelector('.btn-text').textContent = 'Sending confirmation...';
+        const textData = new FormData();
+        const fields = collectFormFields(form);
+        for (const [key, value] of Object.entries(fields)) textData.append(key, value);
+        for (const [key, url] of Object.entries(fileUrls)) textData.append(key + '_url', url);
+        textData.append('money_os_application_id', applicationId);
+        textData.append('money_os_company_id', RENMAL_COMPANY_ID);
+        textData.append('filesUploadedCount', String(uploadedDocs.length));
+        textData.append('fileUrls', JSON.stringify(fileUrls));
+
         const resp = await fetch(FORMSPREE_URL, {
             method: 'POST',
             body: textData,
             headers: { 'Accept': 'application/json' }
         });
-        if (resp.ok) {
-            showToast('Application submitted successfully! We will contact you within 24 hours.', 'success');
-            form.reset();
-            form.querySelectorAll('.upload-preview').forEach(p => p.innerHTML = '');
-            form.querySelectorAll('.upload-opt').forEach(b => b.classList.remove('has-file'));
-        } else {
-            const data = await resp.json().catch(() => ({}));
-            if (fileEntries.length > 0) {
-                showToast('Form had an issue but your files were saved. We will follow up.', 'error');
-            } else {
-                showToast(data.error || 'Something went wrong. Please try again.', 'error');
-            }
-        }
-    } catch (err) {
-        if (fileEntries.length > 0 && Object.keys(fileUrls).length > 0) {
-            showToast('Network error but files were uploaded. We will follow up with you.', 'error');
-        } else {
-            showToast('Network error. Please check your connection.', 'error');
-        }
-    }
 
-    btn.disabled = false;
-    btn.classList.remove('loading');
-    btn.innerHTML = origHTML;
+        if (!resp.ok) {
+            console.warn('Formspree email failed after Supabase save', await resp.text().catch(() => ''));
+            showToast('Application saved. Email notification had an issue, but Renmal can see it in Money OS.', 'success');
+        } else {
+            showToast('Application submitted successfully! We will contact you within 24 hours.', 'success');
+        }
+
+        form.reset();
+        form.querySelectorAll('.upload-preview').forEach(p => p.innerHTML = '');
+        form.querySelectorAll('.upload-opt').forEach(b => b.classList.remove('has-file'));
+    } catch (err) {
+        console.error('Application submission error:', err);
+        showToast(err.message || 'Something went wrong. Please try again.', 'error');
+    } finally {
+        btn.disabled = false;
+        btn.classList.remove('loading');
+        btn.innerHTML = origHTML;
+    }
 }
 
 document.getElementById('personalLoanForm').addEventListener('submit', (e) => {
