@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-labelledby="title description">
+  <title id="title">Renmal Capital money bag</title>
+  <desc id="description">A green money bag with a dollar sign on a blue circular background.</desc>
+  <circle cx="256" cy="256" r="256" fill="#2563eb"/>
+  <path d="M185 99h45l26 76-74-52zM327 99h-45l-26 76 74-52z" fill="#a7f3d0"/>
+  <path d="M208 99h96l-48 76z" fill="#bbf7d0"/>
+  <path d="M190 174h132l-29 30h-74z" fill="#16a34a"/>
+  <path d="M222 201h68l16 19h-100z" fill="#86efac"/>
+  <path d="M256 221c-73 0-119 58-119 133 0 73 50 112 119 112s119-39 119-112c0-75-46-133-119-133z" fill="#bbf7d0"/>
+  <path d="M239 283c5-9 13-14 25-14 16 0 29 9 37 20l-18 18c-7-8-14-12-22-12-7 0-11 3-11 8 0 5 4 8 19 11 24 5 39 16 39 39 0 19-13 34-36 38v21h-28v-21c-19-4-34-15-43-29l19-19c8 11 18 19 31 19 10 0 15-4 15-10 0-6-5-9-21-13-23-6-37-16-37-38 0-18 11-32 31-37v-19h28z" fill="#059669"/>
+</svg>
