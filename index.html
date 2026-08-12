@@ -257,9 +257,9 @@
                     </div>
                     <div class="flex gap-2 mb-4">
                         <input type="number" id="customAmount" class="custom-input-box" placeholder="Or enter custom amount" min="100000" max="5000000" step="10000">
-                        <button type="button" onclick="setCustomAmount()" class="btn-primary" style="padding:10px 20px;font-size:13px;white-space:nowrap">Set</button>
+                        <button type="button" id="setCustomAmountButton" class="btn-primary" style="padding:10px 20px;font-size:13px;white-space:nowrap">Set</button>
                     </div>
-                    <input type="range" id="loanAmount" class="calc-range mb-2" min="100000" max="5000000" step="100000" value="1000000">
+                    <input type="range" id="loanAmount" class="calc-range mb-2" min="100000" max="5000000" step="10000" value="1000000">
                     <div class="flex justify-between text-xs text-slate-500"><span>100K</span><span id="amountDisplay" class="text-brand-400 font-semibold text-sm">MWK 1,000,000</span><span>5M</span></div>
                 </div>
                 <div class="mb-6 sm:mb-8">
@@ -1029,12 +1029,45 @@ function closeMobile() { document.getElementById('mobileMenu').classList.remove(
 const secs = document.querySelectorAll('section[id]'), navL = document.querySelectorAll('.nav-link');
 window.addEventListener('scroll', () => { let c = ''; secs.forEach(s => { if (scrollY >= s.offsetTop - 120) c = s.id; }); navL.forEach(l => { l.classList.remove('active'); if (l.getAttribute('href')?.replace('#', '') === c) l.classList.add('active'); }); });
 
-const aS = document.getElementById('loanAmount'), tS = document.getElementById('loanTerm'), aD = document.getElementById('amountDisplay'), tD = document.getElementById('termDisplay'), rD = document.getElementById('rateDisplay'), tR = document.getElementById('totalRepayment'), pD = document.getElementById('principalDisplay'), iD = document.getElementById('interestDisplay'), duD = document.getElementById('durationDisplay'), cA = document.getElementById('customAmount');
+const aS = document.getElementById('loanAmount'), tS = document.getElementById('loanTerm'), aD = document.getElementById('amountDisplay'), tD = document.getElementById('termDisplay'), rD = document.getElementById('rateDisplay'), tR = document.getElementById('totalRepayment'), pD = document.getElementById('principalDisplay'), iD = document.getElementById('interestDisplay'), duD = document.getElementById('durationDisplay'), cA = document.getElementById('customAmount'), cAB = document.getElementById('setCustomAmountButton');
 const rM = { 1: 20, 2: 30, 3: 40, 4: 50 }, tL = { 1: '1 Week', 2: '2 Weeks', 3: '3 Weeks', 4: '4 Weeks' };
-function fMWK(n) { return 'MWK ' + n.toLocaleString('en-MW'); }
-function uC() { const a = +aS.value, w = +tS.value, r = rM[w]; aD.textContent = fMWK(a); tD.textContent = `${tL[w]} — ${r}%`; rD.textContent = `${r}%`; const i = a * r / 100; tR.textContent = fMWK(a + i); pD.textContent = fMWK(a); iD.textContent = fMWK(i); duD.textContent = tL[w]; document.querySelectorAll('.amount-btn').forEach(b => b.classList.toggle('active', +b.dataset.amount === a)); document.querySelectorAll('.term-btn').forEach(b => b.classList.toggle('active', +b.dataset.weeks === w)); }
-function sCA() { let v = parseInt(cA.value); if (!v || v < 100000) v = 100000; if (v > 5000000) v = 5000000; cA.value = v; aS.value = v; uC(); }
-cA.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); sCA(); } });
+function fMWK(n) { return 'MWK ' + Math.round(n).toLocaleString('en-MW'); }
+function calculateRepayment(amount, weeks) {
+    const rate = rM[weeks];
+    const interest = Math.round(amount * rate / 100);
+    return { rate, interest, total: amount + interest };
+}
+function uC() {
+    const a = Number(aS.value), w = Number(tS.value);
+    const { rate, interest, total } = calculateRepayment(a, w);
+    aD.textContent = fMWK(a);
+    tD.textContent = `${tL[w]} — ${rate}%`;
+    rD.textContent = `${rate}%`;
+    tR.textContent = fMWK(total);
+    pD.textContent = fMWK(a);
+    iD.textContent = fMWK(interest);
+    duD.textContent = tL[w];
+    document.querySelectorAll('.amount-btn').forEach(b => b.classList.toggle('active', Number(b.dataset.amount) === a));
+    document.querySelectorAll('.term-btn').forEach(b => b.classList.toggle('active', Number(b.dataset.weeks) === w));
+}
+function setCustomAmount() {
+    let v = Number(cA.value);
+    if (!Number.isFinite(v)) return;
+    v = Math.round(v);
+    v = Math.max(Number(aS.min), Math.min(Number(aS.max), v));
+    cA.value = v;
+    aS.value = v;
+    uC();
+}
+cA.addEventListener('input', () => {
+    const v = Number(cA.value);
+    if (cA.value !== '' && Number.isFinite(v) && v >= Number(aS.min) && v <= Number(aS.max)) {
+        aS.value = v;
+        uC();
+    }
+});
+cA.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); setCustomAmount(); } });
+cAB.addEventListener('click', setCustomAmount);
 aS.addEventListener('input', () => { cA.value = ''; uC(); });
 tS.addEventListener('input', uC);
 document.querySelectorAll('.amount-btn').forEach(b => b.addEventListener('click', () => { cA.value = ''; aS.value = b.dataset.amount; uC(); }));
