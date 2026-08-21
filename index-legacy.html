@@ -3,13 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Renmal Capital Limited — Move Forward</title>
+    <title>Renmal Capital Limited - Get Your Loan Today</title>
     <link rel="icon" type="image/svg+xml" href="assets/images/renmal-money-bag.svg">
     <link rel="apple-touch-icon" href="assets/images/renmal-money-bag.svg">
-    <link rel="preload" as="image" href="assets/images/renmal-story-emergency.webp" type="image/webp">
-    <link rel="preload" as="image" href="assets/images/renmal-story-business.webp" type="image/webp">
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <script>
         tailwind.config = {
             theme: {
@@ -124,143 +122,6 @@
         @media(max-width:1024px){.features-grid-responsive{grid-template-columns:1fr!important}.feature-card-img{min-height:280px}}
         @media(max-width:768px){.hamburger{display:flex}.desktop-nav{display:none!important}.stat-grid{grid-template-columns:1fr!important}.calc-grid{grid-template-columns:1fr!important}.form-row{grid-template-columns:1fr!important}.upload-grid{grid-template-columns:1fr!important}.footer-grid{grid-template-columns:1fr!important}.toast{bottom:16px;left:16px;right:16px}.hero-title{font-size:2.5rem!important}.tab-btn{padding:12px 16px;font-size:13px}}
         @media(max-width:480px){.hero-title{font-size:2rem!important}.stat-card{padding:14px 16px}.glass-card{padding:16px!important}.amount-btn,.term-btn{padding:6px 12px;font-size:12px}.upload-btns{flex-direction:column}.upload-opt{justify-content:center}}
-        /* ------------------------------------------------------------
-           2026 editorial redesign — warm, local and progress-focused
-        ------------------------------------------------------------- */
-        :root{
-            --ink:#17352d;--forest:#1f4d3d;--forest-dark:#12362b;--leaf:#4f7f5e;
-            --cream:#f5f0e5;--paper:#fffdf8;--sand:#e8ddc8;--clay:#c66a3d;
-            --sun:#efb648;--muted:#6b746d;--line:rgba(23,53,45,.14)
-        }
-        html{scroll-padding-top:84px}
-        body{font-family:'Manrope',sans-serif;background:var(--cream);color:var(--ink)}
-        h1,h2{font-family:'DM Serif Display',serif;font-weight:400;letter-spacing:-.025em}
-        ::selection{background:#d6b76d;color:var(--forest-dark)}
-        ::-webkit-scrollbar-track{background:var(--cream)}
-        ::-webkit-scrollbar-thumb{background:var(--forest);border-radius:99px}
-
-        .nav-glass{background:rgba(245,240,229,.92);border-bottom:1px solid var(--line);backdrop-filter:blur(18px)}
-        .nav-link{color:#496159}
-        .nav-link:hover,.nav-link.active{color:var(--forest-dark)}
-        .nav-link.active::after{background:var(--clay)}
-        nav .text-white{color:var(--forest-dark)!important}
-        .hamburger span{background:var(--forest-dark)}
-        .mobile-menu{background:rgba(245,240,229,.98)}
-        .mobile-menu a{color:var(--forest-dark)}
-        .mobile-menu a:hover{color:var(--clay)}
-
-        .btn-primary{background:var(--clay);color:#fff;border-radius:999px;padding:14px 26px;box-shadow:none}
-        .btn-primary:hover{background:#a9512d;box-shadow:0 10px 28px rgba(126,62,33,.22);transform:translateY(-2px)}
-        .btn-secondary{background:rgba(255,253,248,.85);color:var(--forest-dark);border:1px solid rgba(23,53,45,.3);border-radius:999px;padding:14px 26px}
-        .btn-secondary:hover{background:#fff;color:var(--forest-dark);border-color:var(--forest-dark)}
-
-        .hero-section{min-height:760px;background:var(--forest-dark);display:block;isolation:isolate}
-        .hero-photo{position:absolute;inset:0 0 0 auto;width:49%;background:url('assets/images/renmal-story-emergency.webp') center/cover no-repeat;z-index:0}
-        .hero-section #particleCanvas,.hero-section .hero-glow{display:none}
-        .hero-section>.relative{max-width:80rem!important;margin:0 auto!important;text-align:left!important;padding-top:145px!important;padding-right:calc(49% + 40px)!important;padding-bottom:90px!important}
-        .hero-section .hero-title{max-width:660px;color:#fff;font-size:clamp(3.5rem,6vw,5.8rem)!important;line-height:.93!important;margin-bottom:26px}
-        .hero-section .hero-title span{display:inline;color:#f2cf83!important;background:none!important;-webkit-text-fill-color:initial!important}
-        .hero-section p{color:rgba(255,255,255,.77)!important;margin-left:0!important;font-size:1.05rem;max-width:590px}
-        .hero-section .inline-flex:first-of-type{color:#f2cf83!important;border-color:rgba(242,207,131,.34)!important;background:rgba(242,207,131,.1)!important}
-        .hero-section .inline-flex:first-of-type span{background:#f2cf83!important}
-        .hero-section .stat-grid{margin-left:0!important;max-width:640px!important}
-        .stat-card{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);backdrop-filter:blur(12px);text-align:left;border-radius:14px}
-        .stat-card:hover{border-color:rgba(242,207,131,.6)}
-        .stat-card .text-brand-400{color:#fff!important}
-        .stat-card .text-slate-500{color:rgba(255,255,255,.58)!important}
-        .hero-section .flex.flex-wrap.justify-center{justify-content:flex-start!important}
-        .hero-section .btn-secondary{background:transparent;color:#fff;border-color:rgba(255,255,255,.52)}
-        .hero-section>.absolute{display:none!important}
-
-        #features{background:var(--cream)}
-        #features .text-center{max-width:760px;margin-left:auto;margin-right:auto}
-        #features h2,#calculator h2,#testimonials h2,#apply h2{color:var(--forest-dark);font-size:clamp(2.5rem,5vw,4rem)!important;line-height:1}
-        #features .text-slate-400,#calculator .text-slate-400,#testimonials .text-slate-300,#apply .text-slate-400,footer .text-slate-400{color:var(--muted)!important}
-        #features .inline-flex,#calculator .inline-flex,#testimonials .inline-flex,#apply>.max-w-4xl>.text-center .inline-flex{color:var(--clay)!important;background:rgba(198,106,61,.08)!important;border-color:rgba(198,106,61,.22)!important}
-        .features-grid-responsive{grid-template-columns:1.2fr .8fr .8fr!important;align-items:stretch}
-        .feature-card-img{min-height:460px;border-radius:28px;border:0;box-shadow:0 16px 50px rgba(42,45,36,.1)}
-        .feature-card-img:nth-child(2),.feature-card-img:nth-child(3){min-height:420px;margin-top:40px}
-        .feature-card-overlay{background:linear-gradient(180deg,transparent 22%,rgba(18,54,43,.9) 100%)}
-        .feature-card-img:hover .feature-card-overlay{background:linear-gradient(180deg,transparent 15%,rgba(18,54,43,.94) 100%)}
-        .feature-card-content{padding:28px}
-        .feature-card-content h3{font-family:'DM Serif Display',serif;font-size:1.75rem!important;font-weight:400;color:#fff}
-        .feature-card-content p{color:rgba(255,255,255,.76)!important}
-        .feature-icon-wrap{background:rgba(255,253,248,.15);border-color:rgba(255,255,255,.28)}
-        .feature-icon-wrap svg{stroke:#f2cf83!important}
-        #features .mt-14>div{height:150px!important;max-width:920px!important;border-radius:26px!important;background:var(--forest-dark)}
-        #features .mt-14 img{display:none}
-        #features .mt-14 .absolute.inset-0.bg-gradient-to-r{background:var(--forest-dark)!important}
-        #features .mt-14 .text-transparent{color:#f2cf83!important;background:none!important;-webkit-text-fill-color:initial!important;font-family:'DM Serif Display',serif;font-weight:400}
-        #features .mt-14 p{color:rgba(255,255,255,.62)!important}
-
-        #calculator,#apply{background:var(--paper)!important;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
-        .glass-card,.result-box{background:#fff;border:1px solid var(--line);border-radius:24px;box-shadow:0 18px 60px rgba(23,53,45,.07)}
-        .result-box{background:var(--forest-dark);color:#fff}
-        .result-box .text-white,.result-box .text-slate-200{color:#fff!important}
-        .result-box .text-slate-400{color:rgba(255,255,255,.62)!important}
-        .result-box .text-gold-400{color:#f2cf83!important}
-        .amount-btn,.term-btn{background:var(--cream);border:1px solid var(--line);color:#53645e;border-radius:999px}
-        .amount-btn.active,.term-btn.active{background:var(--forest);border-color:var(--forest);color:#fff}
-        .amount-btn:hover,.term-btn:hover{border-color:var(--forest);color:var(--forest-dark)}
-        .custom-input-box,.form-input{background:#fff;color:var(--ink);border:1px solid rgba(23,53,45,.2);border-radius:12px}
-        .custom-input-box:focus,.form-input:focus{border-color:var(--forest);box-shadow:0 0 0 3px rgba(31,77,61,.1)}
-        select.form-input option{background:#fff;color:var(--ink)}
-        .calc-range{background:linear-gradient(90deg,var(--clay),#dccdb3)}
-        .calc-range::-webkit-slider-thumb{background:var(--clay);border-color:#fff;box-shadow:0 0 0 1px var(--clay)}
-        .calc-range::-moz-range-thumb{background:var(--clay);border-color:#fff}
-        #calculator .text-slate-300,#calculator .text-slate-500,#calculator .text-brand-400{color:var(--forest-dark)!important}
-
-        #testimonials{background:var(--forest)}
-        #testimonials h2{color:#fff}
-        #testimonials .inline-flex{color:#f2cf83!important;background:rgba(242,207,131,.08)!important;border-color:rgba(242,207,131,.26)!important}
-        .marquee-container{mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);-webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
-        .testimonial-card{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:18px}
-        .testimonial-card p{color:rgba(255,255,255,.76)!important}
-        .testimonial-card .text-brand-400{color:#f2cf83!important}
-
-        #apply .glass-card{background:var(--cream)}
-        .tab-btn{color:#5d6d66;border-radius:999px}
-        .tab-btn.active{background:var(--forest);border-color:var(--forest);color:#fff}
-        .tab-btn:hover:not(.active){background:#eee5d5;color:var(--forest-dark)}
-        .form-section-title{font-family:'DM Serif Display',serif;font-size:1.3rem;color:var(--forest-dark);border-color:var(--line)}
-        .form-group label{color:#4e5f58}
-        .alert-box{background:rgba(239,182,72,.15);border-color:rgba(181,126,19,.28);color:#7d5a16}
-        .upload-card{background:#fff;border-color:rgba(23,53,45,.22)}
-        .upload-opt{background:var(--cream);color:var(--forest-dark);border-color:var(--line)}
-        .upload-opt:hover{background:#e9dfcc;border-color:var(--forest);color:var(--forest-dark)}
-        .btn-submit{background:var(--clay);border-radius:999px}
-        .btn-submit:hover:not(:disabled){background:#a9512d;box-shadow:0 10px 28px rgba(126,62,33,.22)}
-
-        footer{background:var(--forest-dark);border-color:rgba(255,255,255,.1)!important}
-        footer .text-white{color:#fff!important}
-        footer .text-slate-300{color:rgba(255,255,255,.76)!important}
-        footer .text-slate-500{color:rgba(255,255,255,.48)!important}
-        footer .text-brand-400{color:#f2cf83!important}
-        .toast-success{background:#e8f3e9;color:#23543e;border-color:#83aa8d}
-        .toast-error{background:#fce9e5;color:#8f3328;border-color:#d9968b}
-
-        @media(max-width:1024px){
-            .features-grid-responsive{grid-template-columns:1fr 1fr!important}
-            .feature-card-img:first-child{grid-column:1/-1}
-            .feature-card-img:nth-child(2),.feature-card-img:nth-child(3){margin-top:0}
-        }
-        @media(max-width:768px){
-            .hero-section{min-height:auto;padding-top:68px;display:flex;flex-direction:column}
-            .hero-photo{position:relative;inset:auto;width:100%;height:360px;order:1;background-position:center}
-            .hero-section>.relative{order:2;padding-top:52px!important;padding-right:1rem!important;padding-bottom:60px!important}
-            .hero-section .hero-title{font-size:clamp(3rem,14vw,4.8rem)!important}
-            .hero-section .stat-grid{grid-template-columns:1fr 1fr 1fr!important}
-            .features-grid-responsive{grid-template-columns:1fr!important}
-            .feature-card-img:first-child{grid-column:auto}
-            .feature-card-img{min-height:390px!important;margin-top:0!important}
-        }
-        @media(max-width:480px){
-            .hero-photo{height:290px;background-position:55% center}
-            .hero-section .stat-grid{grid-template-columns:1fr!important}
-            .stat-card{display:flex;align-items:center;justify-content:space-between;padding:13px 16px}
-            .stat-card .mt-1{margin-top:0}
-            .hero-section .btn-primary,.hero-section .btn-secondary{width:100%;justify-content:center}
-        }
     </style>
 </head>
 <body>
@@ -269,7 +130,7 @@
 
 <div id="mobileMenu" class="mobile-menu">
     <a href="#hero" onclick="closeMobile()">Home</a>
-    <a href="#features" onclick="closeMobile()">Why Renmal</a>
+    <a href="#features" onclick="closeMobile()">Features</a>
     <a href="#calculator" onclick="closeMobile()">Calculator</a>
     <a href="#apply" onclick="closeMobile()">Apply Now</a>
     <a href="#contact" onclick="closeMobile()">Contact</a>
@@ -283,7 +144,7 @@
         </a>
         <div class="desktop-nav flex items-center gap-8" style="display:flex">
             <a href="#hero" class="nav-link active text-sm font-medium no-underline">Home</a>
-            <a href="#features" class="nav-link text-sm font-medium no-underline">Why Renmal</a>
+            <a href="#features" class="nav-link text-sm font-medium no-underline">Features</a>
             <a href="#calculator" class="nav-link text-sm font-medium no-underline">Calculator</a>
             <a href="#apply" class="btn-primary text-sm" style="padding:10px 24px">Apply Now</a>
         </div>
@@ -296,15 +157,14 @@
     <canvas id="particleCanvas"></canvas>
     <div class="hero-glow" style="background:#2563eb;top:-100px;left:-100px"></div>
     <div class="hero-glow" style="background:#7c3aed;bottom:-150px;right:-100px"></div>
-    <div class="hero-photo" role="img" aria-label="A motorist beside his vehicle seeking help after an unexpected breakdown"></div>
     <div class="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 w-full pt-28 pb-20 text-center">
         <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-brand-600/10 border border-brand-600/20 text-brand-400 text-xs font-semibold uppercase tracking-wider mb-6">
-            <span class="w-2 h-2 rounded-full bg-brand-400 animate-pulse"></span>Built for everyday progress in Malawi
+            <span class="w-2 h-2 rounded-full bg-brand-400 animate-pulse"></span>Trusted Microfinance in Malawi
         </div>
         <h1 class="hero-title text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight mb-6" style="font-size:3.5rem">
-            Money for your<br><span class="bg-gradient-to-r from-brand-400 via-brand-500 to-purple-400 bg-clip-text text-transparent">next move.</span>
+            Get Your <br><span class="bg-gradient-to-r from-brand-400 via-brand-500 to-purple-400 bg-clip-text text-transparent">Loan Today</span>
         </h1>
-        <p class="text-base sm:text-lg text-slate-400 max-w-xl mx-auto mb-10 leading-relaxed">From restocking your shop to handling an urgent personal need, Renmal Capital offers quick, affordable loans with clear terms and a team that listens.</p>
+        <p class="text-base sm:text-lg text-slate-400 max-w-xl mx-auto mb-10 leading-relaxed">Quick, affordable microfinance loans tailored for your needs. Fast approval, flexible repayment terms, and dedicated support.</p>
         <div class="stat-grid grid grid-cols-3 gap-3 sm:gap-4 mb-10 max-w-lg mx-auto">
             <div class="stat-card"><div class="text-brand-400 font-bold text-sm sm:text-lg">MWK 100K–5M</div><div class="text-slate-500 text-xs mt-1">Loan Amount</div></div>
             <div class="stat-card"><div class="text-brand-400 font-bold text-sm sm:text-lg">24hrs</div><div class="text-slate-500 text-xs mt-1">Quick Approval</div></div>
@@ -331,40 +191,40 @@
 <section id="features" class="py-20 sm:py-24 relative">
     <div class="max-w-7xl mx-auto px-4 sm:px-6">
         <div class="text-center mb-12 sm:mb-16 reveal">
-            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-brand-600/10 border border-brand-600/20 text-brand-400 text-xs font-semibold uppercase tracking-wider mb-4">Finance that fits real life</div>
-            <h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold mb-4">A loan should move your story forward.</h2>
-            <p class="text-slate-400 max-w-xl mx-auto text-sm sm:text-base">A simple process, practical choices and dedicated support—from your application to your next step.</p>
+            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-brand-600/10 border border-brand-600/20 text-brand-400 text-xs font-semibold uppercase tracking-wider mb-4">Why Choose Us</div>
+            <h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold mb-4">Why Choose Renmal Capital?</h2>
+            <p class="text-slate-400 max-w-xl mx-auto text-sm sm:text-base">We provide fast, reliable microfinance solutions built around your needs</p>
         </div>
         <div class="features-grid-responsive grid md:grid-cols-3 gap-5 sm:gap-6 reveal" style="grid-template-columns:repeat(3,1fr)">
-            <div class="feature-card-img" style="background-image:url('assets/images/renmal-story-business.webp')">
+            <div class="feature-card-img" style="background-image:url('https://z-cdn-media.chatglm.cn/files/114c8f81-2824-4b12-956d-e45a674c6127.png?auth_key=1882219294-ebce6d96444b4c3a9508ebc83eaa9ea4-0-a21eba2f6b9397919ea67d5be2011625')">
                 <div class="feature-card-overlay"></div>
                 <div class="feature-card-content">
                     <div class="feature-icon-wrap"><svg width="26" height="26" fill="none" stroke="#60a5fa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/><path d="M19.5 4.5l2-2" stroke-width="2.5" stroke-linecap="round"/></svg></div>
-                    <h3 class="text-lg sm:text-xl font-bold mb-2">Business loans that keep you moving</h3>
-                    <p class="text-slate-400 text-sm leading-relaxed">Restock, bridge a cash-flow gap or take the next growth opportunity—with applications reviewed within 24 hours.</p>
+                    <h3 class="text-lg sm:text-xl font-bold mb-2">Fast Approval</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed">Get approved within 24 hours with minimal documentation and a streamlined process.</p>
                 </div>
             </div>
-            <div class="feature-card-img" style="background-image:url('assets/images/renmal-story-personal.webp');background-position:center 35%">
+            <div class="feature-card-img" style="background-image:url('https://z-cdn-media.chatglm.cn/files/d7d00108-b361-4af8-9065-4ef6fe41f25c.png?auth_key=1882219294-a568928791514fb88fdf60236452a12c-0-8bfa549f5967cdd8b73d78870a9db4e5')">
                 <div class="feature-card-overlay"></div>
                 <div class="feature-card-content">
                     <div class="feature-icon-wrap"><svg width="26" height="26" fill="none" stroke="#60a5fa" stroke-width="2" stroke-linecap="round" viewBox="0 0 24 24"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg></div>
-                    <h3 class="text-lg sm:text-xl font-bold mb-2">Personal loans for real priorities</h3>
-                    <p class="text-slate-400 text-sm leading-relaxed">Education, medical costs, home improvements or emergencies—choose a 1–4 week repayment period that fits.</p>
+                    <h3 class="text-lg sm:text-xl font-bold mb-2">Flexible Terms</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed">Choose from 1–4 weeks repayment periods with competitive interest rates that suit you.</p>
                 </div>
             </div>
-            <div class="feature-card-img" style="background-image:url('assets/images/renmal-story-mobile-application.webp');background-position:center 35%">
+            <div class="feature-card-img" style="background-image:url('https://z-cdn-media.chatglm.cn/files/c6726d85-4704-4bcc-bb13-b5f48d75d674.png?auth_key=1882219294-4e5b07e0ad8844499f4850721853b67c-0-f2dca2ea8f91a4acf64f5da811f84e5c')">
                 <div class="feature-card-overlay"></div>
                 <div class="feature-card-content">
                     <div class="feature-icon-wrap"><svg width="26" height="26" fill="none" stroke="#60a5fa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/><path d="M9 10l2 2 4-4"/></svg></div>
-                    <h3 class="text-lg sm:text-xl font-bold mb-2">Simple from phone to decision</h3>
-                    <p class="text-slate-400 text-sm leading-relaxed">Apply online from anywhere, upload your supporting documents and receive dedicated support along the way.</p>
+                    <h3 class="text-lg sm:text-xl font-bold mb-2">Easy Process</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed">Simple online application — no paperwork needed. Apply from anywhere, anytime on your phone.</p>
                 </div>
             </div>
         </div>
         <div class="mt-14 sm:mt-16 flex justify-center reveal">
             <div class="relative max-w-2xl w-full rounded-2xl overflow-hidden" style="height:120px">
                 <div class="absolute inset-0 bg-gradient-to-r from-navy-900 via-navy-800 to-navy-900"></div>
-                <img src="assets/images/renmal-story-personal.webp" alt="" class="absolute inset-0 w-full h-full object-cover opacity-15">
+                <img src="https://z-cdn-media.chatglm.cn/files/d7d00108-b361-4af8-9065-4ef6fe41f25c.png?auth_key=1882219294-a568928791514fb88fdf60236452a12c-0-8bfa549f5967cdd8b73d78870a9db4e5" alt="" class="absolute inset-0 w-full h-full object-cover opacity-15">
                 <div class="absolute inset-0 flex items-center justify-center">
                     <div class="text-center">
                         <div class="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-gold-400 to-gold-500 bg-clip-text text-transparent">MWK 100K — 5,000,000</div>
@@ -732,7 +592,7 @@
         <div class="mt-8 sm:mt-10 flex justify-center reveal">
             <div class="relative w-full max-w-lg rounded-2xl overflow-hidden" style="height:110px">
                 <div class="absolute inset-0 bg-gradient-to-r from-navy-900 via-navy-800 to-navy-900"></div>
-                <img src="assets/images/renmal-story-mobile-application.webp" alt="" class="absolute inset-0 w-full h-full object-cover opacity-15" loading="lazy" decoding="async">
+                <img src="https://z-cdn-media.chatglm.cn/files/c6726d85-4704-4bcc-bb13-b5f48d75d674.png?auth_key=1882219294-4e5b07e0ad8844499f4850721853b67c-0-f2dca2ea8f91a4acf64f5da811f84e5c" alt="" class="absolute inset-0 w-full h-full object-cover opacity-15">
                 <div class="absolute inset-0 flex items-center justify-center">
                     <div class="flex items-center gap-3">
                         <svg width="24" height="24" fill="none" stroke="#10b981" stroke-width="2" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
@@ -773,8 +633,9 @@
                 </div>
             </div>
         </div>
-        <div class="border-t border-slate-800/50 pt-6 flex justify-center items-center">
+        <div class="border-t border-slate-800/50 pt-6 flex flex-col sm:flex-row justify-between items-center gap-3">
             <p class="text-xs text-slate-500">&copy; 2026 Renmal Capital Limited. All rights reserved.</p>
+            <p class="text-xs text-slate-500">Website developed by Kho. Contact him at <a href="mailto:ngowelak@gmail.com" class="text-brand-400 hover:underline">email</a></p>
         </div>
     </div>
 </footer>
